@@ -9,10 +9,14 @@ import javax.swing.JSplitPane;
 import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
+import net.miginfocom.swing.MigLayout;
+import javax.swing.JToolBar;
+import javax.swing.JTable;
 
 public class MainFrm {
 
 	private JFrame frame;
+	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -55,7 +59,7 @@ public class MainFrm {
 		menuBar.add(mnAbout);
 		
 		JSplitPane splitPane = new JSplitPane();
-		splitPane.setResizeWeight(0.5);
+		splitPane.setResizeWeight(0.65);
 		frame.getContentPane().add(splitPane, BorderLayout.CENTER);
 		
 		JPanel panel_1 = new JPanel();
@@ -65,6 +69,13 @@ public class MainFrm {
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "People list", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		splitPane.setLeftComponent(panel);
+		panel.setLayout(new MigLayout("", "[grow]", "[][grow]"));
+		
+		JToolBar toolBar = new JToolBar();
+		panel.add(toolBar, "cell 0 0,growx");
+		
+		table = new JTable();
+		panel.add(table, "cell 0 1,grow");
 	}
 
 }
