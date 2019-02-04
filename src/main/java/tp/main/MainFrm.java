@@ -2,6 +2,7 @@ package tp.main;
 
 import java.awt.EventQueue;
 
+
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -12,6 +13,11 @@ import javax.swing.border.TitledBorder;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JToolBar;
 import javax.swing.JTable;
+import javax.swing.JMenuItem;
+import javax.swing.JButton;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 
 public class MainFrm {
 
@@ -39,6 +45,9 @@ public class MainFrm {
 	 */
 	public MainFrm() {
 		initialize();
+		
+		GsonBuilder builder = new  GsonBuilder();
+		
 	}
 
 	/**
@@ -73,6 +82,15 @@ public class MainFrm {
 		
 		JToolBar toolBar = new JToolBar();
 		panel.add(toolBar, "cell 0 0,growx");
+		
+		JButton btnNewButton = new JButton("Add");
+		toolBar.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("Delete");
+		toolBar.add(btnNewButton_1);
+		
+		JButton btnNewButton_2 = new JButton("Edit");
+		toolBar.add(btnNewButton_2);
 		
 		table = new JTable();
 		panel.add(table, "cell 0 1,grow");
