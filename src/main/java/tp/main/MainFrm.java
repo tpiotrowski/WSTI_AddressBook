@@ -1,28 +1,30 @@
 package tp.main;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
-
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JSplitPane;
-import java.awt.BorderLayout;
-import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.JToolBar;
-import javax.swing.JTable;
-import javax.swing.JMenuItem;
 import javax.swing.JButton;
-import com.google.gson.Gson;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.JToolBar;
+import javax.swing.border.TitledBorder;
+
 import com.google.gson.GsonBuilder;
 
+import net.miginfocom.swing.MigLayout;
+import javax.swing.JMenuItem;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JTabbedPane;
 
 public class MainFrm {
 
 	private JFrame frame;
-	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -45,9 +47,7 @@ public class MainFrm {
 	 */
 	public MainFrm() {
 		initialize();
-		
-		GsonBuilder builder = new  GsonBuilder();
-		
+
 	}
 
 	/**
@@ -64,36 +64,35 @@ public class MainFrm {
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 		
+		JMenuItem mntmNew = new JMenuItem("New file");
+		mntmNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (e.getSource() == mntmNew) {
+					
+					JFileChooser fileChooser = new JFileChooser();
+					
+					int retVal = fileChooser.showOpenDialog(frame);
+							
+					
+					
+					
+				}
+				
+			}
+		});
+		mnFile.add(mntmNew);
+		
+		JMenuItem mntmOpen = new JMenuItem("Open file");
+		mnFile.add(mntmOpen);
+		
+		JMenuItem mntmSaveFile = new JMenuItem("Save File");
+		mnFile.add(mntmSaveFile);
+		
 		JMenu mnAbout = new JMenu("About");
 		menuBar.add(mnAbout);
 		
-		JSplitPane splitPane = new JSplitPane();
-		splitPane.setResizeWeight(0.65);
-		frame.getContentPane().add(splitPane, BorderLayout.CENTER);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new TitledBorder(null, "Details", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		splitPane.setRightComponent(panel_1);
-		
-		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "People list", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		splitPane.setLeftComponent(panel);
-		panel.setLayout(new MigLayout("", "[grow]", "[][grow]"));
-		
-		JToolBar toolBar = new JToolBar();
-		panel.add(toolBar, "cell 0 0,growx");
-		
-		JButton btnNewButton = new JButton("Add");
-		toolBar.add(btnNewButton);
-		
-		JButton btnNewButton_1 = new JButton("Delete");
-		toolBar.add(btnNewButton_1);
-		
-		JButton btnNewButton_2 = new JButton("Edit");
-		toolBar.add(btnNewButton_2);
-		
-		table = new JTable();
-		panel.add(table, "cell 0 1,grow");
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 	}
 
 }
