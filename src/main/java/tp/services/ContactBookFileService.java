@@ -5,18 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tp.interfaces.ContactBookLoaderAndPersister;
 import tp.interfaces.ContactBookSerializer;
 import tp.interfaces.ContactBookService;
 import tp.model.Person;
 
 public class ContactBookFileService implements ContactBookService {
 
-	protected ContactBookSerializer serializer;
+	protected ContactBookLoaderAndPersister persister;
 	protected Map<String,Person> persons;
 	
-	public ContactBookFileService(ContactBookSerializer serializer) {
+	public ContactBookFileService(ContactBookLoaderAndPersister persister) {
 		super();
-		this.serializer = serializer;
+		this.persister = persister;
 		this.persons = new HashMap<String, Person>();
 	}	
 	

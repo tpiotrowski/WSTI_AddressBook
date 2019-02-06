@@ -1,6 +1,10 @@
 package tp.interfaces;
 
+import java.util.List;
+
+import tp.model.Person;
+
 public interface ContactBookLoaderAndPersister {
-	void Load();
-	void Persist();
+	List<Person> load();
+	void persist(List<Person> persons);
 }
