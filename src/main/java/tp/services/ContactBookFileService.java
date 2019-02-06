@@ -61,7 +61,9 @@ public class ContactBookFileService implements ContactBookService {
 
 	@Override
 	public void deletePerson(Person person) {
-		
+		if(persons.containsKey(person.getId())) {
+			persons.remove(person.getId());
+		}
 	}
 
 	@Override
