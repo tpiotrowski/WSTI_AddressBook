@@ -1,12 +1,12 @@
 package tp.services;
 
+import java.beans.PersistenceDelegate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import tp.interfaces.ContactBookLoaderAndPersister;
-import tp.interfaces.ContactBookSerializer;
 import tp.interfaces.ContactBookService;
 import tp.model.Person;
 
@@ -20,6 +20,18 @@ public class ContactBookFileService implements ContactBookService {
 		this.persister = persister;
 		this.persons = new HashMap<String, Person>();
 	}	
+	
+	public void Initialize() {
+		var persons = persister.load();
+		
+		for (Person person : persons) {
+			this.persons.put(person.getId(), person);
+		}
+	}
+	
+	public void Persist() {
+		persister.persist(getPersons());
+	}
 	
 	@Override
 	public List<Person> getPersons() {
