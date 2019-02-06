@@ -18,8 +18,8 @@ public class ContactBookFileServiceTest {
 
 	public Person GetPerson() {
 		var person = new Person();
-		person.setName("Tomasz");
-		person.setSurname("Kowalski");
+		person.setName("dasdasdsad");
+		person.setSurname("asdsa");
 		person.setPhone("555254125");
 
 		return person;
@@ -107,6 +107,32 @@ public class ContactBookFileServiceTest {
 	}
 
 	@Test
+	public void test_add_person_to_library_existing() {
+
+		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
+
+		Mockito.when(persister.load()).thenReturn(new ArrayList<Person>() {{
+			add(GetPerson());
+		}});
+
+		ContactBookFileService service = new ContactBookFileService(persister);
+		
+		service.Initialize();
+
+		Assertions.assertAll("Test delete", () -> Assertions.assertFalse(service.getPersons().isEmpty()));
+
+		var person = service.getPersons().get(0);
+		
+		person.setName("Ala_ma_kota");
+		
+		service.addPerson(person);
+
+		var updPerson = service.getPersons().get(0);
+
+		Assertions.assertEquals("Ala_ma_kota", updPerson.getName());
+	}
+	
+	@Test
 	public void test_add_person_to_library() {
 
 		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
@@ -125,6 +151,41 @@ public class ContactBookFileServiceTest {
 		var persons = service.getPersons();
 
 		Assertions.assertFalse(persons.isEmpty());
+	}
+	
+	
+	@Test
+	public void test_findPersonByNamoOrSurname()
+	{
+		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
+		var array = new ArrayList<Person>();
+		var person = new Person();
+		person.setName("Tomasz");
+		person.setSurname("Kowalski");
+		array.add(person);
+		
+		var person2 = new Person();
+		person.setName("Grzegorz");
+		person.setSurname("Kalita");
+		array.add(person2);
+		
+		Mockito.when(persister.load()).thenReturn(array);
+		
+		ContactBookFileService service = new ContactBookFileService(persister);
+		service.Initialize();
+		
+		
+		var foundPerson = service.findPersonByNamoOrSurname("masz");
+		
+		Assertions.assertNotNull(foundPerson, "Person to find");
+		
+		Assertions.assertAll("Get filters",
+				() -> Assertions.assertEquals(foundPerson.getName(), "Tomasz"),
+				() -> Assertions.assertEquals(foundPerson.getSurname(), "Kowalski")
+				);
+		
+		
+		
 	}
 
 }

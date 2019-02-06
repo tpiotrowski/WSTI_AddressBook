@@ -1,10 +1,10 @@
 package tp.services;
 
-import java.beans.PersistenceDelegate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import tp.interfaces.ContactBookLoaderAndPersister;
 import tp.interfaces.ContactBookService;
@@ -13,26 +13,26 @@ import tp.model.Person;
 public class ContactBookFileService implements ContactBookService {
 
 	protected ContactBookLoaderAndPersister persister;
-	protected Map<String,Person> persons;
-	
+	protected Map<String, Person> persons;
+
 	public ContactBookFileService(ContactBookLoaderAndPersister persister) {
 		super();
 		this.persister = persister;
 		this.persons = new HashMap<String, Person>();
-	}	
-	
+	}
+
 	public void Initialize() {
 		var persons = persister.load();
-		
+
 		for (Person person : persons) {
 			this.persons.put(person.getId(), person);
 		}
 	}
-	
+
 	public void Persist() {
 		persister.persist(getPersons());
 	}
-	
+
 	@Override
 	public List<Person> getPersons() {
 		return new ArrayList<Person>(persons.values());
@@ -40,10 +40,10 @@ public class ContactBookFileService implements ContactBookService {
 
 	@Override
 	public void updatePerson(Person person) {
-		if(persons.containsKey(person.getId())) {
-			
+		if (persons.containsKey(person.getId())) {
+
 			var foundedPerson = persons.get(person.getId());
-			
+
 			foundedPerson.setAddresses1(person.getAddresses1());
 			foundedPerson.setAddresses2(person.getAddresses2());
 			foundedPerson.setName(person.getName());
@@ -51,36 +51,49 @@ public class ContactBookFileService implements ContactBookService {
 			foundedPerson.setSurname(person.getSurname());
 			foundedPerson.setTaxId(person.getTaxId());
 			foundedPerson.setIdDocument(person.getIdDocument());
-		}
-		else 
-		{
+		} else {
 			addPerson(person);
 		}
-		
+
 	}
 
 	@Override
 	public void deletePerson(Person person) {
-		if(persons.containsKey(person.getId())) {
+		if (persons.containsKey(person.getId())) {
 			persons.remove(person.getId());
 		}
 	}
 
 	@Override
 	public void addPerson(Person person) {
-		if(persons.containsKey(person.getId())) {
+		if (persons.containsKey(person.getId())) {
 			updatePerson(person);
-		}
-		else {
+		} else {
 			persons.put(person.getId(), person);
 		}
-		
+
 	}
 
 	@Override
 	public Person findPersonByNamoOrSurname(String nameOrSurname) {
-		// TODO Auto-generated method stub
-		return null;
+
+		var personsStream = persons.entrySet().stream();
+		
+		
+		try {
+			
+			var founded = personsStream.filter(p -> p.getValue().getName().toLowerCase().contains(nameOrSurname.toLowerCase()))
+					.collect(Collectors.toList());
+
+			
+			return founded.isEmpty() ? null : founded.get(0).getValue();
+			
+		} catch (NullPointerException e) {
+			return null;
+		}
+		
+	
+
 	}
 
 }
