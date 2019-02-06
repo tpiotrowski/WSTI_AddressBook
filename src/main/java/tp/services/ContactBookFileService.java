@@ -9,23 +9,22 @@ import tp.model.Person;
 public class ContactBookFileService implements ContactBookService {
 
 	protected ContactBookSerializer serializer;
+	protected ArrayList<Person> persons;
 	
 	public ContactBookFileService(ContactBookSerializer serializer) {
 		super();
 		this.serializer = serializer;
+		this.persons = new ArrayList<Person>();
 	}	
 	
 	@Override
 	public ArrayList<Person> GetPersons() {
-		// TODO Auto-generated method stub
-		return null;
-
+		return persons;
 	}
 
 	@Override
 	public void UpdatePerson(Person person) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override

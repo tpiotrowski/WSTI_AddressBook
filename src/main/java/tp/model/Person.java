@@ -1,10 +1,12 @@
 package tp.model;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 
 public class Person {
 
+	private String id;
 	private String name;
 	private String surname;
 	private String phone;
@@ -14,8 +16,10 @@ public class Person {
 	private Address addresses1;
 	private Address addresses2;
 
-	
-	
+	public String getId() {
+		return id;
+	}
+
 	public Person(String name, String surname, String phone, String idDocument, String taxId, Address addresses1,
 			Address addresses2) {
 		super();
@@ -26,6 +30,7 @@ public class Person {
 		this.taxId = taxId;
 		this.addresses1 = addresses1;
 		this.addresses2 = addresses2;
+		this.id = UUID.randomUUID().toString();
 	}
 	
 	public Person() {
