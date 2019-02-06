@@ -6,9 +6,10 @@ import tp.model.Person;
 
 public interface ContactBookService {
 
-	List<Person> GetPersons();
-	void UpdatePerson(Person person);
-	void DeletePerson(Person person);
-	void AddPerson(Person person);
+	List<Person> getPersons();
+	void updatePerson(Person person);
+	void deletePerson(Person person);
+	void addPerson(Person person);
+	Person findPersonByNamoOrSurname(String nameOrSurname);
 	
 }

@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
-
-import com.google.common.base.Optional;
 
 import tp.interfaces.ContactBookSerializer;
 import tp.interfaces.ContactBookService;
@@ -24,12 +21,12 @@ public class ContactBookFileService implements ContactBookService {
 	}	
 	
 	@Override
-	public List<Person> GetPersons() {
+	public List<Person> getPersons() {
 		return new ArrayList<Person>(persons.values());
 	}
 
 	@Override
-	public void UpdatePerson(Person person) {
+	public void updatePerson(Person person) {
 		if(persons.containsKey(person.getId())) {
 			
 			var foundedPerson = persons.get(person.getId());
@@ -44,21 +41,31 @@ public class ContactBookFileService implements ContactBookService {
 		}
 		else 
 		{
-			AddPerson(person);
+			addPerson(person);
 		}
 		
 	}
 
 	@Override
-	public void DeletePerson(Person person) {
-		// TODO Auto-generated method stub
-
+	public void deletePerson(Person person) {
+		
 	}
 
 	@Override
-	public void AddPerson(Person person) {
-		// TODO Auto-generated method stub
+	public void addPerson(Person person) {
+		if(persons.containsKey(person.getId())) {
+			updatePerson(person);
+		}
+		else {
+			persons.put(person.getId(), person);
+		}
+		
+	}
 
+	@Override
+	public Person findPersonByNamoOrSurname(String nameOrSurname) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
