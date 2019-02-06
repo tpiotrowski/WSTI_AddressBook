@@ -37,7 +37,7 @@ public class ContactBookFileServiceTest {
 	public void test_init_method() {
 		// arrange
 
-		ContactBookLoaderAndPersisterFile persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
+		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
 
 		var array = new ArrayList<Person>();
 
@@ -59,7 +59,7 @@ public class ContactBookFileServiceTest {
 	public void test_delete_method() {
 		// arrange
 
-		ContactBookLoaderAndPersisterFile persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
+		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
 
 		var array = new ArrayList<Person>();
 
@@ -86,7 +86,7 @@ public class ContactBookFileServiceTest {
 	public void test_delete_non_existing_method() {
 		// arrange
 
-		ContactBookLoaderAndPersisterFile persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
+		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
 
 		var array = new ArrayList<Person>();
 
@@ -109,7 +109,7 @@ public class ContactBookFileServiceTest {
 	@Test
 	public void test_add_person_to_library() {
 
-		ContactBookLoaderAndPersisterFile persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
+		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
 
 		Mockito.when(persister.load()).thenReturn(new ArrayList<Person>());
 
