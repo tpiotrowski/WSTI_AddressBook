@@ -7,8 +7,11 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.GridLayout;
+import javax.swing.JToolBar;
+import javax.swing.JTable;
 
 public class ContactsListPanel extends JPanel {
+	private JTable table;
 
 	/**
 	 * Create the panel.
@@ -23,6 +26,13 @@ public class ContactsListPanel extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "Contacts", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		splitPane.setLeftComponent(panel);
+		panel.setLayout(new MigLayout("", "[grow]", "[][grow]"));
+		
+		JToolBar toolBar = new JToolBar();
+		panel.add(toolBar, "cell 0 0");
+		
+		table = new JTable();
+		panel.add(table, "cell 0 1,grow");
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(null, "Contact details", TitledBorder.LEADING, TitledBorder.TOP, null, null));

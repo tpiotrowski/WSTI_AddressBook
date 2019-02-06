@@ -93,6 +93,9 @@ public class MainFrm {
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
+		
+		JMenu menu = new JMenu("New menu");
+		tabbedPane.addTab("New tab", null, menu, null);
 	}
 
 }
