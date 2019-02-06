@@ -75,24 +75,23 @@ public class ContactBookFileService implements ContactBookService {
 	}
 
 	@Override
-	public Person findPersonByNamoOrSurname(String nameOrSurname) {
+	public List<Person> findPersonsByNamoOrSurname(String nameOrSurname) {
 
-		var personsStream = persons.entrySet().stream();
-		
-		
+		var personsStream = persons.values().stream();
+
 		try {
-			
-			var founded = personsStream.filter(p -> p.getValue().getName().toLowerCase().contains(nameOrSurname.toLowerCase()))
+
+			var founded = personsStream
+					.filter(p -> (p.getName().toLowerCase().contains(nameOrSurname.toLowerCase())
+							|| (p.getSurname().toLowerCase().contains(nameOrSurname.toLowerCase())))
+							)
 					.collect(Collectors.toList());
 
-			
-			return founded.isEmpty() ? null : founded.get(0).getValue();
-			
+			return founded.isEmpty() ? new ArrayList<Person>() : founded;
+
 		} catch (NullPointerException e) {
-			return null;
+			return new ArrayList<Person>();
 		}
-		
-	
 
 	}
 

@@ -10,6 +10,6 @@ public interface ContactBookService {
 	void updatePerson(Person person);
 	void deletePerson(Person person);
 	void addPerson(Person person);
-	Person findPersonByNamoOrSurname(String nameOrSurname);
+	List<Person> findPersonsByNamoOrSurname(String nameOrSurname);
 	
 }
