@@ -29,12 +29,13 @@ public class Person {
 		this.taxId = taxId;
 		this.addresses1 = addresses1;
 		this.addresses2 = addresses2;
-		this.id = UUID.randomUUID().toString();
+
 	}
 	
 	public Person() {
 		this.addresses1 = new Address();
 		this.addresses2 = new Address();
+		this.id = UUID.randomUUID().toString();
 	}
 	
 	public Address getAddresses1() {

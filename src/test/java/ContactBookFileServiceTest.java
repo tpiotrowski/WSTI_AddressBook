@@ -4,18 +4,47 @@
 import org.junit.Test;
 
 import tp.interfaces.ContactBookLoaderAndPersister;
+import tp.model.Person;
+import tp.services.ContactBookFileService;
+import tp.services.ContactBookLoaderAndPersisterFile;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
+
+import java.util.ArrayList;
 
 
 public class ContactBookFileServiceTest {
 	
+	
+	@Test public void person_gen_id_test()
+	{
+		Person person = new Person();
+		
+		
+		assertNotNull(person.getId());
+		
+	}
+	
     @Test public void test_add_person_to_library() {
 
-    	ContactBookLoaderAndPersister persister = mock(ContactBookLoaderAndPersister.class); 
+    	ContactBookLoaderAndPersisterFile persister = mock(ContactBookLoaderAndPersisterFile.class); 
     	
+    	when(persister.load()).thenReturn(new ArrayList<Person>());
     	
+    	ContactBookFileService service = new ContactBookFileService(persister);
     	
+    	var person = new Person();
+    	person.setName("Tomasz");
+    	person.setSurname("Kowalski");
+    	person.setPhone("555254125");
+    	
+    	service.addPerson(person);
+    	
+    	var persons = service.getPersons();
+    	
+    	assertFalse(persons.isEmpty());
     }
 }
