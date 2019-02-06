@@ -8,16 +8,43 @@ public class Person {
 	private String name;
 	private String surname;
 	private String phone;
-	public ArrayList<Address> getAddresses() {
-		return addresses;
-	}
-	public void setAddresses(ArrayList<Address> addresses) {
-		this.addresses = addresses;
-	}
+	
 	private String idDocument;
 	private String taxId;
-	private ArrayList<Address> addresses;
+	private Address addresses1;
+	private Address addresses2;
+
 	
+	
+	public Person(String name, String surname, String phone, String idDocument, String taxId, Address addresses1,
+			Address addresses2) {
+		super();
+		this.name = name;
+		this.surname = surname;
+		this.phone = phone;
+		this.idDocument = idDocument;
+		this.taxId = taxId;
+		this.addresses1 = addresses1;
+		this.addresses2 = addresses2;
+	}
+	
+	public Person() {
+		this.addresses1 = new Address();
+		this.addresses2 = new Address();
+	}
+	
+	public Address getAddresses1() {
+		return addresses1;
+	}
+	public void setAddresses1(Address addresses1) {
+		this.addresses1 = addresses1;
+	}
+	public Address getAddresses2() {
+		return addresses2;
+	}
+	public void setAddresses2(Address addresses2) {
+		this.addresses2 = addresses2;
+	}
 	public String getIdDocument() {
 		return idDocument;
 	}
