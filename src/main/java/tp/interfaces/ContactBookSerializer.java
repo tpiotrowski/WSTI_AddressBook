@@ -1,10 +1,10 @@
 package tp.interfaces;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import tp.model.Person;
 
 public interface ContactBookSerializer {
-	ArrayList<Person> Deserialize();
-	void Serialize(ArrayList<Person> persnons);
+	List<Person> Deserialize();
+	void Serialize(List<Person> persnons);
 }

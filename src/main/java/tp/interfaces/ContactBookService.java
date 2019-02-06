@@ -1,12 +1,12 @@
 package tp.interfaces;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import tp.model.Person;
 
 public interface ContactBookService {
 
-	ArrayList<Person> GetPersons();
+	List<Person> GetPersons();
 	void UpdatePerson(Person person);
 	void DeletePerson(Person person);
 	void AddPerson(Person person);
