@@ -3,11 +3,19 @@
  */
 import org.junit.Test;
 
+import tp.interfaces.ContactBookLoaderAndPersister;
+
+import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
+
 
 public class ContactBookFileServiceTest {
 	
-    @Test public void testSomeLibraryMethod() {
+    @Test public void test_add_person_to_library() {
 
+    	ContactBookLoaderAndPersister persister = mock(ContactBookLoaderAndPersister.class); 
+    	
+    	
     	
     }
 }
