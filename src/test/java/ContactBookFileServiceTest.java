@@ -5,8 +5,8 @@
 
 import tp.interfaces.ContactBookLoaderAndPersister;
 import tp.model.Person;
-import tp.services.ContactBookFileService;
-import tp.services.ContactBookLoaderAndPersisterFile;
+import tp.services.ContactBookServiceImpl;
+import tp.services.ContactBookFileLoaderAndPersister;
 
 //import org.junit.jupiter.api;
 import org.junit.jupiter.api.Assertions;
@@ -38,7 +38,7 @@ public class ContactBookFileServiceTest {
 	public void test_init_method() {
 		// arrange
 
-		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
+		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
 
 		var array = new ArrayList<Person>();
 
@@ -47,7 +47,7 @@ public class ContactBookFileServiceTest {
 		Mockito.when(persister.load()).thenReturn(array);
 
 		// act
-		ContactBookFileService service = new ContactBookFileService(persister);
+		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
 		service.Initialize();
 
 		// assert
@@ -60,7 +60,7 @@ public class ContactBookFileServiceTest {
 	public void test_delete_method() {
 		// arrange
 
-		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
+		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
 
 		var array = new ArrayList<Person>();
 
@@ -69,7 +69,7 @@ public class ContactBookFileServiceTest {
 		Mockito.when(persister.load()).thenReturn(array);
 
 		// act
-		ContactBookFileService service = new ContactBookFileService(persister);
+		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
 		service.Initialize();
 
 		var personToDelete = service.getPersons().get(0);
@@ -87,7 +87,7 @@ public class ContactBookFileServiceTest {
 	public void test_delete_non_existing_method() {
 		// arrange
 
-		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
+		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
 
 		var array = new ArrayList<Person>();
 
@@ -96,7 +96,7 @@ public class ContactBookFileServiceTest {
 		Mockito.when(persister.load()).thenReturn(array);
 
 		// act
-		ContactBookFileService service = new ContactBookFileService(persister);
+		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
 		service.Initialize();
 
 		service.deletePerson(new Person());
@@ -110,7 +110,7 @@ public class ContactBookFileServiceTest {
 	@Test
 	public void test_add_person_to_library_existing() {
 
-		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
+		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
 
 		Mockito.when(persister.load()).thenReturn(new ArrayList<Person>() {
 			{
@@ -118,7 +118,7 @@ public class ContactBookFileServiceTest {
 			}
 		});
 
-		ContactBookFileService service = new ContactBookFileService(persister);
+		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
 
 		service.Initialize();
 
@@ -138,11 +138,11 @@ public class ContactBookFileServiceTest {
 	@Test
 	public void test_add_person_to_library() {
 
-		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
+		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
 
 		Mockito.when(persister.load()).thenReturn(new ArrayList<Person>());
 
-		ContactBookFileService service = new ContactBookFileService(persister);
+		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
 
 		var person = new Person();
 		person.setName("Tomasz");
@@ -159,7 +159,7 @@ public class ContactBookFileServiceTest {
 	@Test
 	public void test_findPersonByNamoOrSurname() {
 
-		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
+		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
 		var array = new ArrayList<Person>();
 
 		var person = new Person();
@@ -177,7 +177,7 @@ public class ContactBookFileServiceTest {
 			}
 		});
 
-		ContactBookFileService service = new ContactBookFileService(persister);
+		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
 		service.Initialize();
 
 		var foundPerson = service.findPersonsByNamoOrSurname("masz");
@@ -193,7 +193,7 @@ public class ContactBookFileServiceTest {
 	@Test
 	public void test_findPersonByNamoOrSurname_empty_res() {
 
-		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
+		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
 		var array = new ArrayList<Person>();
 
 		var person = new Person();
@@ -211,7 +211,7 @@ public class ContactBookFileServiceTest {
 			}
 		});
 
-		ContactBookFileService service = new ContactBookFileService(persister);
+		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
 		service.Initialize();
 
 		var foundPerson = service.findPersonsByNamoOrSurname("xxx");
@@ -225,7 +225,7 @@ public class ContactBookFileServiceTest {
 	@Test
 	public void test_findPersonByNamoOrSurname_multiple_res() {
 
-		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookLoaderAndPersisterFile.class);
+		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
 		var array = new ArrayList<Person>();
 
 		var person = new Person();
@@ -243,7 +243,7 @@ public class ContactBookFileServiceTest {
 			}
 		});
 
-		ContactBookFileService service = new ContactBookFileService(persister);
+		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
 		service.Initialize();
 
 		var foundPerson = service.findPersonsByNamoOrSurname("o");

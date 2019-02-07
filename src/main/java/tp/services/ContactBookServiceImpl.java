@@ -10,12 +10,12 @@ import tp.interfaces.ContactBookLoaderAndPersister;
 import tp.interfaces.ContactBookService;
 import tp.model.Person;
 
-public class ContactBookFileService implements ContactBookService {
+public class ContactBookServiceImpl implements ContactBookService {
 
 	protected ContactBookLoaderAndPersister persister;
 	protected Map<String, Person> persons;
 
-	public ContactBookFileService(ContactBookLoaderAndPersister persister) {
+	public ContactBookServiceImpl(ContactBookLoaderAndPersister persister) {
 		super();
 		this.persister = persister;
 		this.persons = new HashMap<String, Person>();

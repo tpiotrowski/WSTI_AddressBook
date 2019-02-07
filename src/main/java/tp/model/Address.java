@@ -1,6 +1,13 @@
 package tp.model;
 
-public class Address {
+import java.io.Serializable;
+
+public class Address implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 291060865051886117L;
 	private String homeNumberString;
 	private String flatNumber;
 	private String city;

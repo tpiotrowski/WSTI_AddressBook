@@ -1,10 +1,15 @@
 package tp.model;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 
-public class Person {
+public class Person implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4186161129817002576L;
 	private String id;
 	private String name;
 	private String surname;
