@@ -35,7 +35,7 @@ public class ContactBookFileServiceTest {
 	}
 
 	@Test
-	public void test_init_method() {
+	public void test_init_method() throws Exception {
 		// arrange
 
 		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
@@ -57,7 +57,7 @@ public class ContactBookFileServiceTest {
 	}
 
 	@Test
-	public void test_delete_method() {
+	public void test_delete_method() throws Exception {
 		// arrange
 
 		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
