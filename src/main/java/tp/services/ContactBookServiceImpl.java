@@ -34,7 +34,7 @@ public class ContactBookServiceImpl implements ContactBookService {
 	}
 
 	@Override
-	public List<Person> getPersons() {
+	public ArrayList<Person> getPersons() {
 		return new ArrayList<Person>(persons.values());
 	}
 
@@ -75,7 +75,7 @@ public class ContactBookServiceImpl implements ContactBookService {
 	}
 
 	@Override
-	public List<Person> findPersonsByNamoOrSurname(String nameOrSurname) {
+	public ArrayList<Person> findPersonsByNamoOrSurname(String nameOrSurname) {
 
 		var personsStream = persons.values().stream();
 
@@ -87,7 +87,7 @@ public class ContactBookServiceImpl implements ContactBookService {
 							)
 					.collect(Collectors.toList());
 
-			return founded.isEmpty() ? new ArrayList<Person>() : founded;
+			return founded.isEmpty() ? new ArrayList<Person>() : new ArrayList<Person>(founded);
 
 		} catch (NullPointerException e) {
 			return new ArrayList<Person>();
