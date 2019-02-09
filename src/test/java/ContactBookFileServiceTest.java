@@ -84,7 +84,7 @@ public class ContactBookFileServiceTest {
 	}
 
 	@Test
-	public void test_delete_non_existing_method() {
+	public void test_delete_non_existing_method() throws Exception {
 		// arrange
 
 		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
@@ -108,7 +108,7 @@ public class ContactBookFileServiceTest {
 	}
 
 	@Test
-	public void test_add_person_to_library_existing() {
+	public void test_add_person_to_library_existing() throws Exception {
 
 		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
 
@@ -136,7 +136,7 @@ public class ContactBookFileServiceTest {
 	}
 
 	@Test
-	public void test_add_person_to_library() {
+	public void test_add_person_to_library() throws Exception {
 
 		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
 
@@ -157,7 +157,7 @@ public class ContactBookFileServiceTest {
 	}
 
 	@Test
-	public void test_findPersonByNamoOrSurname() {
+	public void test_findPersonByNamoOrSurname() throws Exception {
 
 		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
 		var array = new ArrayList<Person>();
@@ -191,7 +191,7 @@ public class ContactBookFileServiceTest {
 	}
 
 	@Test
-	public void test_findPersonByNamoOrSurname_empty_res() {
+	public void test_findPersonByNamoOrSurname_empty_res() throws Exception {
 
 		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
 		var array = new ArrayList<Person>();
@@ -223,7 +223,7 @@ public class ContactBookFileServiceTest {
 	}
 
 	@Test
-	public void test_findPersonByNamoOrSurname_multiple_res() {
+	public void test_findPersonByNamoOrSurname_multiple_res() throws Exception {
 
 		ContactBookLoaderAndPersister persister = Mockito.mock(ContactBookFileLoaderAndPersister.class);
 		var array = new ArrayList<Person>();

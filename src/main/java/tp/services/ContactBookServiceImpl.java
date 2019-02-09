@@ -29,7 +29,7 @@ public class ContactBookServiceImpl implements ContactBookService {
 		}
 	}
 
-	public void Persist() {
+	public void Persist() throws Exception {
 		persister.persist(getPersons());
 	}
 
