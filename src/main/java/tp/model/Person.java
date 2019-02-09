@@ -10,34 +10,21 @@ public class Person implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -4186161129817002576L;
-	private String id;
-	private String name;
-	private String surname;
-	private String phone;
-	
-	private String idDocument;
-	private String taxId;
-	private Address addresses1;
-	private Address addresses2;
+	 String id;
+	 String name;
+	 String surname;
+	 String phone;	
+	 String idDocument;
+	 String taxId;
+	 Address addresses1;
+	 Address addresses2;
 
 	public String getId() {
 		return id;
 	}
 
-	public Person(String name, String surname, String phone, String idDocument, String taxId, Address addresses1,
-			Address addresses2) {
-		super();
-		this.name = name;
-		this.surname = surname;
-		this.phone = phone;
-		this.idDocument = idDocument;
-		this.taxId = taxId;
-		this.addresses1 = addresses1;
-		this.addresses2 = addresses2;
-
-	}
-	
 	public Person() {
+		super();
 		this.addresses1 = new Address();
 		this.addresses2 = new Address();
 		this.id = UUID.randomUUID().toString();
@@ -55,6 +42,8 @@ public class Person implements Serializable{
 	public void setAddresses2(Address addresses2) {
 		this.addresses2 = addresses2;
 	}
+	
+	
 	public String getIdDocument() {
 		return idDocument;
 	}
@@ -85,4 +74,12 @@ public class Person implements Serializable{
 	public void setSurname(String surnameString) {
 		this.surname = surnameString;
 	}
+	
+	
+
+	@Override
+    public String toString() {
+        return "Dupa";
+    }
+	
 }

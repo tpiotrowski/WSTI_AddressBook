@@ -35,3 +35,5 @@ build/
 bin/
 .recommenders/
 .settings/
+/miglayout15-swing.jar
+/miglayout-src.zip

@@ -7,16 +7,16 @@ public class Address implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 291060865051886117L;
-	private String homeNumberString;
-	private String flatNumber;
-	private String city;
-	private String country;
-	private String zip;
+	 static final long serialVersionUID = 291060865051886117L;
+	 String homeNumberString;
+	 String flatNumber;
+	 String city;
+	 String country;
+	 String zip;
 	
 	
 	public Address() {
-		
+		super();
 	}
 	
 	public Address(String homeNumberString, String flatNumber, String city, String country, String zip) {
@@ -58,6 +58,13 @@ public class Address implements Serializable{
 	public void setZip(String zip) {
 		this.zip = zip;
 	}
+	
+	
+	@Override
+    public String toString() {
+        return "Dupa";
+    }
+	
 	
 	
 }
