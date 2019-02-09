@@ -42,7 +42,7 @@ public class ContactBookFileLoaderAndPersister implements ContactBookLoaderAndPe
 
 	}
 
-	public ContactBookSerializer FactoryContactBookSerializer() {
+	protected ContactBookSerializer FactoryContactBookSerializer() {
 		return new ContactBookSerializerImpl();
 	}
 
