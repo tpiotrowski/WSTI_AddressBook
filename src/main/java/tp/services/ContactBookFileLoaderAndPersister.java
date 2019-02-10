@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
 
 import tp.interfaces.ContactBookLoaderAndPersister;
 import tp.interfaces.ContactBookSerializer;
@@ -22,6 +23,11 @@ public class ContactBookFileLoaderAndPersister implements ContactBookLoaderAndPe
 	@Override
 	public List<Person> load() throws Exception {
 
+		var tmpDir = new File(filePath);
+		boolean exists = tmpDir.exists();
+		if(!exists)
+			return new ArrayList<Person>();
+		
 		try (FileInputStream fileInputStream = new FileInputStream(filePath)) {
 			byte[] result = fileInputStream.readAllBytes();
 

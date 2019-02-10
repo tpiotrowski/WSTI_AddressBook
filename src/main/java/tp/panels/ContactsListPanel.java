@@ -4,6 +4,9 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.border.TitledBorder;
 import net.miginfocom.swing.MigLayout;
+import tp.interfaces.ContactBookService;
+import tp.services.ContactBookServiceFactory;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.GridLayout;
@@ -14,7 +17,7 @@ public class ContactsListPanel extends JPanel {
 	private JTable table;
 
 	String source;
-	
+	ContactBookService service;
 	
 	/**
 	 * Create the panel.
@@ -46,7 +49,14 @@ public class ContactsListPanel extends JPanel {
 	{
 		this.source = source;
 		
+		service = ContactBookServiceFactory.factory(source);
 		
-		
+		try {
+			service.Initialize();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

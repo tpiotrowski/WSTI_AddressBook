@@ -12,5 +12,6 @@ public interface ContactBookService {
 	void deletePerson(Person person);
 	void addPerson(Person person);
 	ArrayList<Person> findPersonsByNamoOrSurname(String nameOrSurname);
+	void Initialize() throws Exception;
 	
 }

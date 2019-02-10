@@ -21,6 +21,7 @@ public class ContactBookServiceImpl implements ContactBookService {
 		this.persons = new HashMap<String, Person>();
 	}
 
+	@Override
 	public void Initialize() throws Exception {
 		var persons = persister.load();
 

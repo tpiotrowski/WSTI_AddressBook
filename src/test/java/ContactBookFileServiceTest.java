@@ -4,6 +4,7 @@
  */
 
 import tp.interfaces.ContactBookLoaderAndPersister;
+import tp.interfaces.ContactBookService;
 import tp.model.Person;
 import tp.services.ContactBookServiceImpl;
 import tp.services.ContactBookFileLoaderAndPersister;
@@ -47,7 +48,7 @@ public class ContactBookFileServiceTest {
 		Mockito.when(persister.load()).thenReturn(array);
 
 		// act
-		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
+		ContactBookService service = new ContactBookServiceImpl(persister);
 		service.Initialize();
 
 		// assert
@@ -69,7 +70,7 @@ public class ContactBookFileServiceTest {
 		Mockito.when(persister.load()).thenReturn(array);
 
 		// act
-		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
+		ContactBookService service = new ContactBookServiceImpl(persister);
 		service.Initialize();
 
 		var personToDelete = service.getPersons().get(0);
@@ -96,7 +97,7 @@ public class ContactBookFileServiceTest {
 		Mockito.when(persister.load()).thenReturn(array);
 
 		// act
-		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
+		ContactBookService service = new ContactBookServiceImpl(persister);
 		service.Initialize();
 
 		service.deletePerson(new Person());
@@ -118,7 +119,7 @@ public class ContactBookFileServiceTest {
 			}
 		});
 
-		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
+		ContactBookService service = new ContactBookServiceImpl(persister);
 
 		service.Initialize();
 
@@ -142,7 +143,7 @@ public class ContactBookFileServiceTest {
 
 		Mockito.when(persister.load()).thenReturn(new ArrayList<Person>());
 
-		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
+		ContactBookService service = new ContactBookServiceImpl(persister);
 
 		var person = new Person();
 		person.setName("Tomasz");
@@ -177,7 +178,7 @@ public class ContactBookFileServiceTest {
 			}
 		});
 
-		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
+		ContactBookService service = new ContactBookServiceImpl(persister);
 		service.Initialize();
 
 		var foundPerson = service.findPersonsByNamoOrSurname("masz");
@@ -211,7 +212,7 @@ public class ContactBookFileServiceTest {
 			}
 		});
 
-		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
+		ContactBookService service = new ContactBookServiceImpl(persister);
 		service.Initialize();
 
 		var foundPerson = service.findPersonsByNamoOrSurname("xxx");
@@ -243,7 +244,7 @@ public class ContactBookFileServiceTest {
 			}
 		});
 
-		ContactBookServiceImpl service = new ContactBookServiceImpl(persister);
+		ContactBookService service = new ContactBookServiceImpl(persister);
 		service.Initialize();
 
 		var foundPerson = service.findPersonsByNamoOrSurname("o");
