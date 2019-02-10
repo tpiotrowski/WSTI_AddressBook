@@ -50,6 +50,8 @@ public class MainFrm {
 
 	}
 
+	
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -65,15 +67,7 @@ public class MainFrm {
 		menuBar.add(mnFile);
 
 		JMenuItem mntmNew = new JMenuItem("New file");
-		mntmNew.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (e.getSource() == mntmNew) {
-					JFileChooser fileChooser = new JFileChooser();
-					int retVal = fileChooser.showOpenDialog(frame);
-				}
-
-			}
-		});
+		
 		mnFile.add(mntmNew);
 
 		JMenuItem mntmOpen = new JMenuItem("Open file");
@@ -87,6 +81,20 @@ public class MainFrm {
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
+		
+		mntmNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (e.getSource() == mntmNew) {
+					JFileChooser fileChooser = new JFileChooser();
+					int retVal = fileChooser.showOpenDialog(frame);
+					
+					
+					
+				}
+
+			}
+		});
+		
 	}
 
 }

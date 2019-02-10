@@ -13,6 +13,9 @@ import javax.swing.JTable;
 public class ContactsListPanel extends JPanel {
 	private JTable table;
 
+	String source;
+	
+	
 	/**
 	 * Create the panel.
 	 */
@@ -37,5 +40,13 @@ public class ContactsListPanel extends JPanel {
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(null, "Contact details", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		splitPane.setRightComponent(panel_1);
+	}
+	
+	public void setSource(String source)
+	{
+		this.source = source;
+		
+		
+		
 	}
 }
