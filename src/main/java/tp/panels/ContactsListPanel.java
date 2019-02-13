@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.border.TitledBorder;
 
+
 import net.miginfocom.swing.MigLayout;
 import tp.interfaces.IContactBookService;
 import tp.interfaces.IContactListEditor;
@@ -25,9 +26,11 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
 
 public class ContactsListPanel extends JPanel implements IContactListEditor {
 	private JTable table;
+	JPanel contactDetailsPanel;
 
 	String source;
 	IContactBookService service;
@@ -49,9 +52,12 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		panel.setBorder(new TitledBorder(null, "Contacts", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		splitPane.setLeftComponent(panel);
 		panel.setLayout(new MigLayout("", "[grow]", "[][grow]"));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		panel.add(scrollPane, "flowx,cell 0 1,grow");
 
 		table = new JTable();
-		panel.add(table, "cell 0 1,grow");
+		scrollPane.setViewportView(table);
 
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(e -> newPersonButton(e));
@@ -70,10 +76,11 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		panel.add(textField, "cell 0 0");
 		textField.setColumns(200);
 
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(
+		contactDetailsPanel = new JPanel();
+		contactDetailsPanel.setBorder(
 				new TitledBorder(null, "Contact details", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		splitPane.setRightComponent(panel_1);
+		splitPane.setRightComponent(contactDetailsPanel);
+		contactDetailsPanel.setLayout(new MigLayout("", "[]", "[]"));
 	}
 
 	@Override
@@ -87,6 +94,12 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		}
 	}
 
+	@Override
+	public String getSource()
+	{
+		return this.source; 
+	}
+	
 	public void setSource(String source, Boolean isNew) {
 		this.source = source;
 
@@ -103,6 +116,23 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 			}
 
 			model = new PersonsTableModel(table, list);
+			table.getSelectionModel().addListSelectionListener(e -> {
+				var selectedRowIndex = table.getSelectedRow();
+
+				var person = model.getRow(selectedRowIndex);
+				
+				ContactDetails cDetails = new ContactDetails();
+				
+				cDetails.setReadOnly(true);
+				cDetails.setData(person);
+				contactDetailsPanel.removeAll();
+				contactDetailsPanel.add(cDetails,"flowx,cell 0 0,grow");
+				contactDetailsPanel.revalidate();
+				validate();
+				
+				
+			});
+			
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

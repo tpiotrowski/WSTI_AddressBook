@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
+import net.bytebuddy.asm.Advice.This;
+
 public class PersonsTableModel extends AbstractTableModel {
 
 	String[] columnNameStrings = { "Name", "Surname" };
@@ -91,13 +93,16 @@ public class PersonsTableModel extends AbstractTableModel {
 	
 	
 	
-
-
 	@Override
 	public int getRowCount() {
 		return persons.size();
 	}
 
+	public Person getRow(int index)
+	{
+		return persons.get(index);
+	}
+	
 	@Override
 	public int getColumnCount() {
 		return columnNameStrings.length;

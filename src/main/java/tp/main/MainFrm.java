@@ -41,6 +41,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
 
@@ -116,13 +117,13 @@ public class MainFrm {
 		// Action listeners
 
 		mntmOpen.addActionListener(s -> {
-			openOrCreateFile(tabbedPane,true);	
+			openOrCreateFile(tabbedPane, true);
 		});
 
 		mntmNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == mntmNew) {
-					openOrCreateFile(tabbedPane,false);
+					openOrCreateFile(tabbedPane, false);
 				}
 			}
 
@@ -130,104 +131,95 @@ public class MainFrm {
 	}
 
 	private void openOrCreateFile(JTabbedPane tabbedPane, Boolean isOpen) {
-		
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-		        "Address book db", "abdb");
-		
+
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Address book db", "abdb");
+
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.setFileFilter(filter);
 		int retVal = -1;
-	
-		if(isOpen) {
-			
+
+		if (isOpen) {
+
 			retVal = fileChooser.showOpenDialog(frame);
-			
-		}
-		else {
+
+		} else {
 			retVal = fileChooser.showSaveDialog(frame);
 		}
-		
-		
+
 		if (retVal == JFileChooser.APPROVE_OPTION) {
 
 			addDbEditorTab(tabbedPane, fileChooser);
 		}
 	}
 
-	
-	
-	private File addFileExtensionIfNotExists(File file,String extension) {
-		
+	private File addFileExtensionIfNotExists(File file, String extension) {
+
 		if (FilenameUtils.getExtension(file.getName()).equalsIgnoreCase(extension)) {
-		    // filename is OK as-is
+			// filename is OK as-is
 		} else {
-		    file = new File(file.toString() + "."+extension);  // append .xml if "foo.jpg.xml" is OK
-		    file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName())+"."+extension); // ALTERNATIVELY: remove the extension (if any) and replace it with ".xml"
+			file = new File(file.toString() + "." + extension); // append .xml if "foo.jpg.xml" is OK
+			file = new File(file.getParentFile(), FilenameUtils.getBaseName(file.getName()) + "." + extension);
 		}
-		
+
 		return file;
 	}
-	
+
 	private void addDbEditorTab(JTabbedPane tabbedPane, JFileChooser fileChooser) {
 		File selectedFile = fileChooser.getSelectedFile();
 
 		selectedFile = addFileExtensionIfNotExists(selectedFile, "abdb");
-		
+
 		String dbFilePath = selectedFile.getAbsolutePath();
 
 		if (!openedDataBasesHashMap.containsKey(dbFilePath)) {
 
 			var dbEditor = new ContactsListPanel();
-			dbEditor.setDirtyChangedEventListener((isDirty,source) ->{
-				
+			dbEditor.setDirtyChangedEventListener((isDirty, source) -> {
+
 				var index = -1;
-				
-				if(openedDataBasesHashMap.containsKey(source)) {
+
+				if (openedDataBasesHashMap.containsKey(source)) {
 					var paneInfo = openedDataBasesHashMap.get(source);
 					index = paneInfo.tabIndex;
 				}
-				
-				if(index == -1) return;
-				
+
+				if (index == -1)
+					return;
+
 				var titleComponent = (TabPanelTitle) tabbedPane.getTabComponentAt(index);
-				
-				if(isDirty)
-				{
+
+				if (isDirty) {
 					var title = titleComponent.getTitle();
-					
+
 					title = title + " *";
-					
+
 					titleComponent.setTitleLabel(title);
-				}else {
+				} else {
 					var title = titleComponent.getTitle();
-					
+
 					title = title.replace(" *", "");
-					
+
 					titleComponent.setTitleLabel(title);
 				}
-				
-				
-				
+
 			});
 
 			dbEditor.setSource(dbFilePath, !selectedFile.exists());
 
 			tabbedPane.add(dbFilePath, dbEditor);
-			
-			tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(dbEditor), getTitlePanel(tabbedPane, dbEditor, dbFilePath));
-			
-			
-			
-			var tabIndex = tabbedPane.getTabCount() -1;
-			
+
+			tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(dbEditor),
+					getTitlePanel(tabbedPane, dbEditor, dbFilePath));
+
+			var tabIndex = tabbedPane.getTabCount() - 1;
+
 			var paneInfo = new PaneInfo();
 			paneInfo.editor = dbEditor;
 			paneInfo.tabIndex = tabIndex;
-			
-			openedDataBasesHashMap.put(dbFilePath,paneInfo);
-			
-			
+
+			openedDataBasesHashMap.put(dbFilePath, paneInfo);
+
 		}
 
 	}
@@ -254,23 +246,23 @@ public class MainFrm {
 		}
 		return false;
 	}
-	
+
 	private WindowAdapter windowListener() {
 		return new WindowAdapter() {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				
-				if(hasUnsavedChanges())
-				{
-					if (JOptionPane.showConfirmDialog(frame, "You have unsaved changes! Are you sure you want to close this window?", "Close Window?",
+
+				if (hasUnsavedChanges()) {
+					if (JOptionPane.showConfirmDialog(frame,
+							"You have unsaved changes! Are you sure you want to close this window?", "Close Window?",
 							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 						System.exit(0);
-					}	
-				}else {
+					}
+				} else {
 					System.exit(0);
 				}
-				
+
 			}
 
 			@Override
@@ -283,20 +275,49 @@ public class MainFrm {
 
 	class PaneInfo {
 		public int tabIndex;
-		public IContactListEditor editor; 
+		public IContactListEditor editor;
 	}
-	
-	 private static JPanel getTitlePanel(final JTabbedPane tabbedPane, final JPanel panel, String title)
-	 {
-		 TabPanelTitle titlePanel = new TabPanelTitle();
-		 titlePanel.setTitleLabel(title);
-		 titlePanel.setCloseButtonEventListener(l -> {
-			 tabbedPane.remove(panel);			  
-		 });
 
+	private JPanel getTitlePanel(final JTabbedPane tabbedPane, final ContactsListPanel panel, String title) {
+		TabPanelTitle titlePanel = new TabPanelTitle();
+		titlePanel.setTitleLabel(title);
+		titlePanel.setCloseButtonEventListener(l -> {
 
-	  return titlePanel;
-	 }
-	
-	
+			var index = tabbedPane.indexOfComponent(panel);
+
+			String dirtyKey = isEditorDirtyByIndex(index);
+
+			if (dirtyKey != null && !dirtyKey.isEmpty()) {
+
+				if (JOptionPane.showConfirmDialog(frame,
+						"You have unsaved changes! Are you sure you want to close this editor?",
+						"Close database editor?", JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+
+					tabbedPane.remove(panel);
+					openedDataBasesHashMap.remove(dirtyKey);
+
+				}
+			} else {
+				tabbedPane.remove(panel);
+				openedDataBasesHashMap.remove(panel.getSource());
+			}
+
+		});
+
+		return titlePanel;
+	}
+
+	String isEditorDirtyByIndex(int index) {
+		for (var entry : openedDataBasesHashMap.entrySet()) {
+
+			var key = entry.getKey();
+			var value = entry.getValue();
+			if (value.tabIndex == index && value.editor.isDirty())
+				return key;
+		}
+
+		return null;
+	}
+
 }

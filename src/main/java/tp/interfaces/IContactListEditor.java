@@ -7,4 +7,5 @@ public interface IContactListEditor {
 	void setSource(String source, Boolean isNew);
 	Boolean isDirty();
 	void setDirtyChangedEventListener(IDirtyChangedEventListener e);
+	String getSource();
 }
