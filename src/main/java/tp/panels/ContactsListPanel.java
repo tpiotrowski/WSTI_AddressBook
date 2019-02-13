@@ -18,14 +18,22 @@ import java.util.ArrayList;
 
 import javax.swing.JToolBar;
 import javax.swing.JTable;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ContactsListPanel extends JPanel implements IContactListEditor {
 	private JTable table;
 
 	String source;
 	IContactBookService service;
-	
-	
+	private JTextField textField;
+	PersonsTableModel model;
+
 	/**
 	 * Create the panel.
 	 */
@@ -41,11 +49,25 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		splitPane.setLeftComponent(panel);
 		panel.setLayout(new MigLayout("", "[grow]", "[][grow]"));
 
-		JToolBar toolBar = new JToolBar();
-		panel.add(toolBar, "cell 0 0");
-
 		table = new JTable();
 		panel.add(table, "cell 0 1,grow");
+
+		JButton btnAdd = new JButton("Add");
+		btnAdd.addActionListener(e -> newPersonButton(e));
+		panel.add(btnAdd, "flowx,cell 0 0");
+
+		JButton btnEdit = new JButton("Edit");
+		panel.add(btnEdit, "cell 0 0");
+
+		JButton btnDelete = new JButton("Delete");
+		panel.add(btnDelete, "cell 0 0,alignx left,aligny top");
+
+		JLabel lblSearch = new JLabel("Search:");
+		panel.add(lblSearch, "cell 0 0");
+
+		textField = new JTextField();
+		panel.add(textField, "cell 0 0");
+		textField.setColumns(200);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(
@@ -58,17 +80,17 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 
 		service = ContactBookServiceFactory.factory(source);
 
+		ArrayList<Person> list = null;
+
 		try {
-			if (!isNew) {
-				service.Initialize();
-				var list = service.getPersons();
-
-				FillJTable(table, list);
+			if (isNew) {
+				list = service.getPersons();
 			} else {
-				var list = service.getPersons();
-
-				FillJTable(table, list);
+				service.Initialize();
+				list = service.getPersons();
 			}
+
+			model = new PersonsTableModel(table, list);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -76,17 +98,25 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		}
 	}
 
-	protected void FillJTable(JTable table, ArrayList<Person> persons) {
-		var model = new PersonsTableModel(persons);
+	void newPersonButton(ActionEvent e) {
+		ContactDetails contactDetailsPanel = new ContactDetails();
+		contactDetailsPanel.setData(new Person());
+		int result = JOptionPane.showConfirmDialog(null, contactDetailsPanel, "My custom dialog",
+				JOptionPane.OK_CANCEL_OPTION);
+		if (result == JOptionPane.OK_OPTION) {
 
-		table.setModel(model);
+			var person = contactDetailsPanel.getData();
 
+			service.addPerson(person);
+			model.addPerson(person);
+
+		}
 	}
 
 	@Override
 	public void persist() throws Exception {
 		service.persist();
-		
+
 	}
 
 	@Override

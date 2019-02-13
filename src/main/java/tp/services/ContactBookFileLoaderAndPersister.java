@@ -18,6 +18,7 @@ public class ContactBookFileLoaderAndPersister implements IContactBookLoaderAndP
 	public ContactBookFileLoaderAndPersister(String path) {
 		super();
 		this.serializer = FactoryContactBookSerializer();
+		this.filePath = path;
 	}
 
 	@Override

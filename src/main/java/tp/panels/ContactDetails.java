@@ -129,7 +129,7 @@ public class ContactDetails extends JPanel {
 		tfTaxNr.setText(person.getTaxId());
 	}
 
-	public Person getDtata() {
+	public Person getData() {
 		return person;
 	}
 	
