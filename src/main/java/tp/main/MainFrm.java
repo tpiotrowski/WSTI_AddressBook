@@ -213,13 +213,17 @@ public class MainFrm {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				if (JOptionPane.showConfirmDialog(frame, "Are you sure you want to close this window?", "Close Window?",
-						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-
-					persistAll();
-
+				
+				if(hasUnsavedChanges())
+				{
+					if (JOptionPane.showConfirmDialog(frame, "You have unsaved changes! Are you sure you want to close this window?", "Close Window?",
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+						System.exit(0);
+					}	
+				}else {
 					System.exit(0);
 				}
+				
 			}
 
 			@Override

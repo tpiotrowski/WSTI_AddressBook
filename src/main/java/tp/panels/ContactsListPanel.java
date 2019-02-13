@@ -33,6 +33,7 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 	IContactBookService service;
 	private JTextField textField;
 	PersonsTableModel model;
+	private IDirtyChangedEventListener dirtyChangedListener = null;
 
 	/**
 	 * Create the panel.
@@ -75,6 +76,17 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		splitPane.setRightComponent(panel_1);
 	}
 
+	@Override
+	public void setDirtyChangedEventListener(IDirtyChangedEventListener e) {
+		this.dirtyChangedListener = e;
+	}
+
+	private void fireDrityChanged(Boolean isDirty) {
+		if (dirtyChangedListener != null) {
+			dirtyChangedListener.onDirtyChanged(isDirty);
+		}
+	}
+
 	public void setSource(String source, Boolean isNew) {
 		this.source = source;
 
@@ -101,7 +113,7 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 	void newPersonButton(ActionEvent e) {
 		ContactDetails contactDetailsPanel = new ContactDetails();
 		contactDetailsPanel.setData(new Person());
-		int result = JOptionPane.showConfirmDialog(null, contactDetailsPanel, "My custom dialog",
+		int result = JOptionPane.showConfirmDialog(null, contactDetailsPanel, "Add new person",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
 
@@ -110,6 +122,7 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 			service.addPerson(person);
 			model.addPerson(person);
 
+			fireDrityChanged(isDirty());
 		}
 	}
 
@@ -121,7 +134,6 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 
 	@Override
 	public Boolean isDirty() {
-		// TODO Auto-generated method stub
 		return service.isDirty();
 	}
 
