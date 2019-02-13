@@ -83,7 +83,7 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 
 	private void fireDrityChanged(Boolean isDirty) {
 		if (dirtyChangedListener != null) {
-			dirtyChangedListener.onDirtyChanged(isDirty);
+			dirtyChangedListener.onDirtyChanged(isDirty,this.source);
 		}
 	}
 
@@ -129,12 +129,13 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 	@Override
 	public void persist() throws Exception {
 		service.persist();
-
+		fireDrityChanged(isDirty());
 	}
 
 	@Override
 	public Boolean isDirty() {
 		return service.isDirty();
 	}
+
 
 }

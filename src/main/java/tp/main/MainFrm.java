@@ -4,10 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.EventQueue;
 
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
@@ -16,6 +18,7 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.text.IconView;
 
 import org.apache.commons.io.FilenameUtils;
@@ -25,11 +28,14 @@ import com.google.gson.GsonBuilder;
 import net.miginfocom.swing.MigLayout;
 import tp.interfaces.IContactListEditor;
 import tp.panels.ContactsListPanel;
+import tp.panels.TabPanelTitle;
 
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -43,6 +49,7 @@ import javax.swing.JTabbedPane;
 public class MainFrm {
 
 	private JFrame frame;
+	private JTabbedPane tabbedPane;
 
 	/**
 	 * Launch the application.
@@ -68,7 +75,7 @@ public class MainFrm {
 
 	}
 
-	HashMap<String, IContactListEditor> openedDataBasesHashMap = new HashMap<String, IContactListEditor>();
+	HashMap<String, PaneInfo> openedDataBasesHashMap = new HashMap<String, PaneInfo>();
 
 	/**
 	 * Initialize the contents of the frame.
@@ -103,7 +110,7 @@ public class MainFrm {
 		JMenu mnAbout = new JMenu("About");
 		menuBar.add(mnAbout);
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
 		// Action listeners
@@ -128,9 +135,6 @@ public class MainFrm {
 		        "Address book db", "abdb");
 		
 		JFileChooser fileChooser = new JFileChooser();
-		
-		
-		
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.setFileFilter(filter);
 		int retVal = -1;
@@ -175,21 +179,64 @@ public class MainFrm {
 		if (!openedDataBasesHashMap.containsKey(dbFilePath)) {
 
 			var dbEditor = new ContactsListPanel();
+			dbEditor.setDirtyChangedEventListener((isDirty,source) ->{
+				
+				var index = -1;
+				
+				if(openedDataBasesHashMap.containsKey(source)) {
+					var paneInfo = openedDataBasesHashMap.get(source);
+					index = paneInfo.tabIndex;
+				}
+				
+				if(index == -1) return;
+				
+				var titleComponent = (TabPanelTitle) tabbedPane.getTabComponentAt(index);
+				
+				if(isDirty)
+				{
+					var title = titleComponent.getTitle();
+					
+					title = title + " *";
+					
+					titleComponent.setTitleLabel(title);
+				}else {
+					var title = titleComponent.getTitle();
+					
+					title = title.replace(" *", "");
+					
+					titleComponent.setTitleLabel(title);
+				}
+				
+				
+				
+			});
 
 			dbEditor.setSource(dbFilePath, !selectedFile.exists());
 
-			openedDataBasesHashMap.put(dbFilePath, dbEditor);
-
-			tabbedPane.addTab(dbFilePath, dbEditor);
+			tabbedPane.add(dbFilePath, dbEditor);
+			
+			tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(dbEditor), getTitlePanel(tabbedPane, dbEditor, dbFilePath));
+			
+			
+			
+			var tabIndex = tabbedPane.getTabCount() -1;
+			
+			var paneInfo = new PaneInfo();
+			paneInfo.editor = dbEditor;
+			paneInfo.tabIndex = tabIndex;
+			
+			openedDataBasesHashMap.put(dbFilePath,paneInfo);
+			
+			
 		}
 
 	}
 
 	void persistAll() {
-		for (IContactListEditor editor : openedDataBasesHashMap.values()) {
-			if (editor.isDirty()) {
+		for (PaneInfo paneInfo : openedDataBasesHashMap.values()) {
+			if (paneInfo.editor.isDirty()) {
 				try {
-					editor.persist();
+					paneInfo.editor.persist();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -200,8 +247,8 @@ public class MainFrm {
 	}
 
 	Boolean hasUnsavedChanges() {
-		for (IContactListEditor editor : openedDataBasesHashMap.values()) {
-			if (editor.isDirty()) {
+		for (PaneInfo paneInfo : openedDataBasesHashMap.values()) {
+			if (paneInfo.editor.isDirty()) {
 				return true;
 			}
 		}
@@ -234,4 +281,22 @@ public class MainFrm {
 		};
 	}
 
+	class PaneInfo {
+		public int tabIndex;
+		public IContactListEditor editor; 
+	}
+	
+	 private static JPanel getTitlePanel(final JTabbedPane tabbedPane, final JPanel panel, String title)
+	 {
+		 TabPanelTitle titlePanel = new TabPanelTitle();
+		 titlePanel.setTitleLabel(title);
+		 titlePanel.setCloseButtonEventListener(l -> {
+			 tabbedPane.remove(panel);			  
+		 });
+
+
+	  return titlePanel;
+	 }
+	
+	
 }

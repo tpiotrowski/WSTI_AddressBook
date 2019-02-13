@@ -1,5 +1,5 @@
 package tp.panels;
 
 public interface IDirtyChangedEventListener {
-    void onDirtyChanged (Boolean isDirty);
+    void onDirtyChanged (Boolean isDirty,String source);
 }
