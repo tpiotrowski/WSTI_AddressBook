@@ -3,7 +3,8 @@ package tp.panels;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.border.TitledBorder;
-
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import net.miginfocom.swing.MigLayout;
 import tp.interfaces.IContactBookService;
@@ -27,6 +28,7 @@ import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
+import javax.swing.JFormattedTextField;
 
 public class ContactsListPanel extends JPanel implements IContactListEditor {
 	private JTable table;
@@ -37,6 +39,8 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 	private JTextField textField;
 	PersonsTableModel model;
 	private IDirtyChangedEventListener dirtyChangedListener = null;
+	private JTable table_1;
+	private JTable table_2;
 
 	/**
 	 * Create the panel.
@@ -75,12 +79,48 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		textField = new JTextField();
 		panel.add(textField, "cell 0 0");
 		textField.setColumns(200);
+		textField.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				filterPerson();
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				filterPerson();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				
+				
+				
+			}
+
+			private void filterPerson() {
+				ArrayList<Person> persons = null;
+				
+				var text = textField.getText();
+				if(text != null && !text.isEmpty()) {
+					persons = service.findPersonsByNamoOrSurname(text);
+				}else {
+					persons = service.getPersons();
+				}
+				
+				model.setPersons(persons);
+			}
+		});
 
 		contactDetailsPanel = new JPanel();
 		contactDetailsPanel.setBorder(
 				new TitledBorder(null, "Contact details", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		splitPane.setRightComponent(contactDetailsPanel);
-		contactDetailsPanel.setLayout(new MigLayout("", "[]", "[]"));
+		contactDetailsPanel.setLayout(new MigLayout("", "[grow]", "[grow]"));
+		
+
 	}
 
 	@Override
@@ -126,7 +166,7 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 				cDetails.setReadOnly(true);
 				cDetails.setData(person);
 				contactDetailsPanel.removeAll();
-				contactDetailsPanel.add(cDetails,"flowx,cell 0 0,grow");
+				contactDetailsPanel.add(cDetails,"cell 0 0,growx,aligny top");
 				contactDetailsPanel.revalidate();
 				validate();
 				

@@ -32,7 +32,10 @@ public class PersonsTableModel extends AbstractTableModel {
 		dataChanged();
 	}
 	
-	
+	public void setPersons(ArrayList<Person> persons) {
+		this.persons = persons;
+		dataChanged();
+	}
 	
 	public void addPerson(Person person) {
 		persons.add(person);
@@ -54,7 +57,6 @@ public class PersonsTableModel extends AbstractTableModel {
 			dataChanged();
 		}
 	}
-	
 	
 	public void deletePerson(Person person) {
 		
