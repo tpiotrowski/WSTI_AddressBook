@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 
-import tp.interfaces.ContactBookLoaderAndPersister;
-import tp.interfaces.ContactBookSerializer;
+import tp.interfaces.IContactBookLoaderAndPersister;
+import tp.interfaces.IContactBookSerializer;
 import tp.model.Person;
 
-public class ContactBookFileLoaderAndPersister implements ContactBookLoaderAndPersister {
+public class ContactBookFileLoaderAndPersister implements IContactBookLoaderAndPersister {
 
-	private ContactBookSerializer serializer;
+	private IContactBookSerializer serializer;
 	private String filePath = "";
 
 	public ContactBookFileLoaderAndPersister(String path) {
@@ -48,7 +48,7 @@ public class ContactBookFileLoaderAndPersister implements ContactBookLoaderAndPe
 
 	}
 
-	protected ContactBookSerializer FactoryContactBookSerializer() {
+	protected IContactBookSerializer FactoryContactBookSerializer() {
 		return new ContactBookSerializerImpl();
 	}
 

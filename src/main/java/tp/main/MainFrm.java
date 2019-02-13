@@ -20,6 +20,7 @@ import javax.swing.text.IconView;
 import com.google.gson.GsonBuilder;
 
 import net.miginfocom.swing.MigLayout;
+import tp.interfaces.IContactListEditor;
 import tp.panels.ContactsListPanel;
 
 import javax.swing.JMenuItem;
@@ -62,7 +63,7 @@ public class MainFrm {
 
 	}
 
-	HashMap<String, Component> openedDataBasesHashMap = new HashMap<String, Component>();
+	HashMap<String, IContactListEditor> openedDataBasesHashMap = new HashMap<String, IContactListEditor>();
 
 	/**
 	 * Initialize the contents of the frame.
@@ -72,7 +73,6 @@ public class MainFrm {
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.addWindowListener(windowListener());
 		frame.setBounds(100, 100, 620, 469);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
@@ -87,8 +87,11 @@ public class MainFrm {
 		JMenuItem mntmOpen = new JMenuItem("Open file");
 		mnFile.add(mntmOpen);
 
-		JMenuItem mntmSaveFile = new JMenuItem("Save File");
+		JMenuItem mntmSaveFile = new JMenuItem("Save current");
 		mnFile.add(mntmSaveFile);
+		
+		JMenuItem mntmSaveFileAll = new JMenuItem("Save all");
+		mnFile.add(mntmSaveFileAll);
 
 		JMenu mnAbout = new JMenu("About");
 		menuBar.add(mnAbout);
@@ -130,6 +133,12 @@ public class MainFrm {
 
 	}
 
+	
+	void persistAll()
+	{
+		
+	}
+	
 	private WindowAdapter windowListener() {
 		return new WindowAdapter() {
 
@@ -139,6 +148,9 @@ public class MainFrm {
 			            "Are you sure you want to close this window?", "Close Window?", 
 			            JOptionPane.YES_NO_OPTION,
 			            JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+						
+						
+					
 			            System.exit(0);
 			        }
 			}

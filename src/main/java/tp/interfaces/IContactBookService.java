@@ -5,7 +5,7 @@ import java.util.List;
 
 import tp.model.Person;
 
-public interface ContactBookService {
+public interface IContactBookService {
 
 	ArrayList<Person> getPersons();
 	void updatePerson(Person person);
@@ -13,5 +13,7 @@ public interface ContactBookService {
 	void addPerson(Person person);
 	ArrayList<Person> findPersonsByNamoOrSurname(String nameOrSurname);
 	void Initialize() throws Exception;
+	void persist() throws Exception;
+	Boolean isDirty();
 	
 }

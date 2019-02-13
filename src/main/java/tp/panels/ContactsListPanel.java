@@ -5,7 +5,8 @@ import javax.swing.JSplitPane;
 import javax.swing.border.TitledBorder;
 
 import net.miginfocom.swing.MigLayout;
-import tp.interfaces.ContactBookService;
+import tp.interfaces.IContactBookService;
+import tp.interfaces.IContactListEditor;
 import tp.model.Person;
 import tp.model.PersonsTableModel;
 import tp.services.ContactBookServiceFactory;
@@ -18,12 +19,13 @@ import java.util.ArrayList;
 import javax.swing.JToolBar;
 import javax.swing.JTable;
 
-public class ContactsListPanel extends JPanel {
+public class ContactsListPanel extends JPanel implements IContactListEditor {
 	private JTable table;
 
 	String source;
-	ContactBookService service;
-
+	IContactBookService service;
+	
+	
 	/**
 	 * Create the panel.
 	 */
@@ -79,6 +81,18 @@ public class ContactsListPanel extends JPanel {
 
 		table.setModel(model);
 
+	}
+
+	@Override
+	public void persist() throws Exception {
+		service.persist();
+		
+	}
+
+	@Override
+	public Boolean isDirty() {
+		// TODO Auto-generated method stub
+		return service.isDirty();
 	}
 
 }

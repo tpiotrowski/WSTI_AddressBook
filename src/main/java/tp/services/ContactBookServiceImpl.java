@@ -6,16 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import tp.interfaces.ContactBookLoaderAndPersister;
-import tp.interfaces.ContactBookService;
+import tp.interfaces.IContactBookLoaderAndPersister;
+import tp.interfaces.IContactBookService;
 import tp.model.Person;
 
-public class ContactBookServiceImpl implements ContactBookService {
+public class ContactBookServiceImpl implements IContactBookService {
 
-	protected ContactBookLoaderAndPersister persister;
+	protected IContactBookLoaderAndPersister persister;
 	protected Map<String, Person> persons;
+	protected Boolean isDirty;
 
-	public ContactBookServiceImpl(ContactBookLoaderAndPersister persister) {
+	public ContactBookServiceImpl(IContactBookLoaderAndPersister persister) {
 		super();
 		this.persister = persister;
 		this.persons = new HashMap<String, Person>();
@@ -28,15 +29,19 @@ public class ContactBookServiceImpl implements ContactBookService {
 		for (Person person : persons) {
 			this.persons.put(person.getId(), person);
 		}
+		
+		isDirty = false;
 	}
 
-	public void Persist() throws Exception {
+	public void persist() throws Exception {
 		persister.persist(getPersons());
+		isDirty = false;
 	}
 
 	@Override
 	public ArrayList<Person> getPersons() {
 		return new ArrayList<Person>(persons.values());
+		
 	}
 
 	@Override
@@ -56,13 +61,16 @@ public class ContactBookServiceImpl implements ContactBookService {
 			addPerson(person);
 		}
 
+		isDirty = true;
 	}
 
 	@Override
 	public void deletePerson(Person person) {
 		if (persons.containsKey(person.getId())) {
 			persons.remove(person.getId());
+			isDirty = true;
 		}
+		
 	}
 
 	@Override
@@ -72,7 +80,8 @@ public class ContactBookServiceImpl implements ContactBookService {
 		} else {
 			persons.put(person.getId(), person);
 		}
-
+		
+		isDirty = true;
 	}
 
 	@Override
@@ -94,6 +103,12 @@ public class ContactBookServiceImpl implements ContactBookService {
 			return new ArrayList<Person>();
 		}
 
+	}
+
+	@Override
+	public Boolean isDirty() {
+		// TODO Auto-generated method stub
+		return isDirty;
 	}
 
 }

@@ -1,13 +1,13 @@
 package tp.services;
 
-import tp.interfaces.ContactBookLoaderAndPersister;
-import tp.interfaces.ContactBookService;
+import tp.interfaces.IContactBookLoaderAndPersister;
+import tp.interfaces.IContactBookService;
 
 public class ContactBookServiceFactory {
 
-	public static ContactBookService factory(String path) {
-		ContactBookLoaderAndPersister persister = new ContactBookFileLoaderAndPersister(path);
-		ContactBookService service = new ContactBookServiceImpl(persister);
+	public static IContactBookService factory(String path) {
+		IContactBookLoaderAndPersister persister = new ContactBookFileLoaderAndPersister(path);
+		IContactBookService service = new ContactBookServiceImpl(persister);
 
 		return service;
 

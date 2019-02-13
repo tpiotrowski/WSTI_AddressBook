@@ -11,6 +11,7 @@ import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.beans.PropertyChangeEvent;
 
 public class ContactDetails extends JPanel {
@@ -21,10 +22,18 @@ public class ContactDetails extends JPanel {
 	private JTextField tfTaxNr;
 	private Person person;
 
+	ArrayList<JTextField> textFields = new ArrayList<JTextField>();
+	
+	
 	/**
 	 * Create the panel.
 	 */
 	public ContactDetails() {
+		initialize();
+
+	}
+
+	private void initialize() {
 		setLayout(new MigLayout("", "[grow]", "[112.00,grow][grow]"));
 
 		JPanel panel = new JPanel();
@@ -38,6 +47,8 @@ public class ContactDetails extends JPanel {
 		SwingTools.addChangeListener(tfName, e -> {
 			person.setName(tfName.getText());
 		});
+		
+		textFields.add(tfName);
 
 		panel.add(tfName, "flowx,cell 1 0,growx");
 		tfName.setColumns(10);
@@ -49,6 +60,8 @@ public class ContactDetails extends JPanel {
 		panel.add(tfSurname, "cell 3 0");
 		tfSurname.setColumns(10);
 
+		textFields.add(tfSurname);
+		
 		SwingTools.addChangeListener(tfSurname, e -> {
 			person.setSurname(tfSurname.getText());
 		});
@@ -60,6 +73,8 @@ public class ContactDetails extends JPanel {
 		panel.add(tfPhone, "cell 1 1,growx");
 		tfPhone.setColumns(10);
 
+		textFields.add(tfPhone);
+		
 		SwingTools.addChangeListener(tfPhone, e -> {
 			person.setPhone(tfPhone.getText());
 		});
@@ -71,6 +86,8 @@ public class ContactDetails extends JPanel {
 		panel.add(tfIdDocument, "cell 1 2,growx,aligny top");
 		tfIdDocument.setColumns(10);
 
+		textFields.add(tfIdDocument);
+		
 		SwingTools.addChangeListener(tfIdDocument, e -> {
 			person.setIdDocument(tfIdDocument.getText());
 		});
@@ -82,13 +99,21 @@ public class ContactDetails extends JPanel {
 		panel.add(tfTaxNr, "cell 1 3,growx");
 		tfTaxNr.setColumns(10);
 
+		textFields.add(tfTaxNr);
+		
 		SwingTools.addChangeListener(tfTaxNr, e -> {
 			person.setTaxId(tfTaxNr.getText());
 		});
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		add(tabbedPane, "cell 0 1,grow");
+		
+		AddressDetailsPanel panel_1 = new AddressDetailsPanel();
+		tabbedPane.addTab("Address 1", null, panel_1, null);
+		
 
+		AddressDetailsPanel panel_2 = new AddressDetailsPanel();
+		tabbedPane.addTab("Address 2", null, panel_2, null);
 	}
 
 	public void setData(Person person) {
@@ -107,5 +132,13 @@ public class ContactDetails extends JPanel {
 	public Person getDtata() {
 		return person;
 	}
+	
+	
+	public void setReadOnly(Boolean isReadOnly) {
+		for (JTextField jTextField : textFields) {
+			jTextField.setEditable(!isReadOnly);
+		}
+	}
+	
 
 }

@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import tp.interfaces.ContactBookSerializer;
+import tp.interfaces.IContactBookSerializer;
 import tp.model.Person;
 import tp.services.ContactBookSerializerImpl;
 
@@ -52,7 +52,7 @@ class ContactBookSerializerImplTest {
 
 		
 		
-		ContactBookSerializer serializer = new ContactBookSerializerImpl();
+		IContactBookSerializer serializer = new ContactBookSerializerImpl();
 
 		var array = GetPersonsArray();
 		

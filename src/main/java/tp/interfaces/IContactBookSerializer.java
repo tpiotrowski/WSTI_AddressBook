@@ -5,7 +5,7 @@ import java.util.List;
 
 import tp.model.Person;
 
-public interface ContactBookSerializer {
+public interface IContactBookSerializer {
 	List<Person> deserialize(byte[] data) throws Exception;
 	byte[] serialize(ArrayList<Person> persnons) throws Exception;
 }

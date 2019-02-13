@@ -9,10 +9,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import tp.interfaces.ContactBookSerializer;
+import tp.interfaces.IContactBookSerializer;
 import tp.model.Person;
 
-public class ContactBookSerializerImpl implements ContactBookSerializer {
+public class ContactBookSerializerImpl implements IContactBookSerializer {
 
 	@Override
 	public List<Person> deserialize(byte[] data) throws Exception {
