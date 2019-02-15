@@ -44,6 +44,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
+import java.awt.Dimension;
 
 //import org.apache.commons.io;
 
@@ -83,9 +84,10 @@ public class MainFrm {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setMinimumSize(new Dimension(1000, 500));
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.addWindowListener(windowListener());
-		frame.setBounds(100, 100, 620, 469);
+		frame.setBounds(100, 100, 995, 535);
 
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);

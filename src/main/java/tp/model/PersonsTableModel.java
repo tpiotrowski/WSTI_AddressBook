@@ -39,7 +39,7 @@ public class PersonsTableModel extends AbstractTableModel {
 	
 	public void addPerson(Person person) {
 		persons.add(person);
-		dataChanged();
+		fireTableRowsInserted(persons.size() -1 ,persons.size() -1);
 	}
 
 	private void dataChanged() {
@@ -54,7 +54,7 @@ public class PersonsTableModel extends AbstractTableModel {
 		{
 			persons.set(personToUpdate, person);
 			
-			dataChanged();
+			fireTableRowsUpdated(personToUpdate, personToUpdate);
 		}
 	}
 	
@@ -65,8 +65,13 @@ public class PersonsTableModel extends AbstractTableModel {
 		toDeletePerson = findPersonById(person);
 		
 		if(toDeletePerson != null) {
+			 var indexToRemove = persons.indexOf(person);
+			
 			persons.remove(person);
-			dataChanged();
+			
+			
+			
+			fireTableRowsDeleted(indexToRemove, indexToRemove);
 		}
 	}
 

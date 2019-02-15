@@ -1,7 +1,21 @@
 package tp.panels;
 
+import java.awt.Component;
+import java.awt.Dialog.ModalityType;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -12,23 +26,8 @@ import tp.interfaces.IContactListEditor;
 import tp.model.Person;
 import tp.model.PersonsTableModel;
 import tp.services.ContactBookServiceFactory;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.GridLayout;
-import java.util.ArrayList;
-
-import javax.swing.JToolBar;
-import javax.swing.JTable;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JScrollPane;
-import javax.swing.JFormattedTextField;
+import java.awt.Dimension;
 
 public class ContactsListPanel extends JPanel implements IContactListEditor {
 	private JTable table;
@@ -39,8 +38,8 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 	private JTextField textField;
 	PersonsTableModel model;
 	private IDirtyChangedEventListener dirtyChangedListener = null;
-	private JTable table_1;
-	private JTable table_2;
+	private JSplitPane splitPane;
+	private JPanel panel;
 
 	/**
 	 * Create the panel.
@@ -48,11 +47,12 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 	public ContactsListPanel() {
 		setLayout(new GridLayout(1, 0, 0, 0));
 
-		JSplitPane splitPane = new JSplitPane();
-		splitPane.setResizeWeight(0.65);
+		splitPane = new JSplitPane();
+		splitPane.setResizeWeight(0);
 		add(splitPane);
 
-		JPanel panel = new JPanel();
+		panel = new JPanel();
+		panel.setMinimumSize(new Dimension(500, 500));
 		panel.setBorder(new TitledBorder(null, "Contacts", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		splitPane.setLeftComponent(panel);
 		panel.setLayout(new MigLayout("", "[grow]", "[][grow]"));
@@ -61,6 +61,9 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		panel.add(scrollPane, "flowx,cell 0 1,grow");
 
 		table = new JTable();
+		table.setAutoCreateRowSorter(true);
+		table.setUpdateSelectionOnSort(true);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(table);
 
 		JButton btnAdd = new JButton("Add");
@@ -68,6 +71,7 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		panel.add(btnAdd, "flowx,cell 0 0");
 
 		JButton btnEdit = new JButton("Edit");
+		btnEdit.addActionListener(e -> editPersonButton(e));
 		panel.add(btnEdit, "cell 0 0");
 
 		JButton btnDelete = new JButton("Delete");
@@ -118,6 +122,9 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		contactDetailsPanel.setBorder(
 				new TitledBorder(null, "Contact details", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		splitPane.setRightComponent(contactDetailsPanel);
+		
+		   splitPane.setOneTouchExpandable(true);
+	        splitPane.setContinuousLayout(true);
 		contactDetailsPanel.setLayout(new MigLayout("", "[grow]", "[grow]"));
 		
 
@@ -156,10 +163,9 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 			}
 
 			model = new PersonsTableModel(table, list);
+			table.getRowSorter().toggleSortOrder(1);
 			table.getSelectionModel().addListSelectionListener(e -> {
-				var selectedRowIndex = table.getSelectedRow();
-
-				var person = model.getRow(selectedRowIndex);
+				var person = getSelectedPerson();
 				
 				ContactDetails cDetails = new ContactDetails();
 				
@@ -167,7 +173,7 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 				cDetails.setData(person);
 				contactDetailsPanel.removeAll();
 				contactDetailsPanel.add(cDetails,"cell 0 0,growx,aligny top");
-				contactDetailsPanel.revalidate();
+				contactDetailsPanel.setSize(cDetails.getMinimumSize());
 				validate();
 				
 				
@@ -180,22 +186,46 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		}
 	}
 
+	private Person getSelectedPerson() {
+		var selectedRowIndex = table.getSelectedRow();
+
+		var person = model.getRow(selectedRowIndex);
+		return person;
+	}
+
 	void newPersonButton(ActionEvent e) {
-		ContactDetails contactDetailsPanel = new ContactDetails();
-		contactDetailsPanel.setData(new Person());
-		int result = JOptionPane.showConfirmDialog(null, contactDetailsPanel, "Add new person",
-				JOptionPane.OK_CANCEL_OPTION);
+		
+		CustomerEditDialog dialog = new CustomerEditDialog();
+		dialog.setData(new Person());
+	    int result = dialog.showDialog();
+	    
 		if (result == JOptionPane.OK_OPTION) {
 
-			var person = contactDetailsPanel.getData();
-
+			var person = dialog.getData();
 			service.addPerson(person);
 			model.addPerson(person);
-
 			fireDrityChanged(isDirty());
 		}
 	}
+	
+	void editPersonButton(ActionEvent e) {	
+		var person = getSelectedPerson();
+	
+		CustomerEditDialog dialog = new CustomerEditDialog();
+		dialog.setData(person);
+	    int result = dialog.showDialog();
+	    
+		if (result == JOptionPane.OK_OPTION) {
 
+			person = dialog.getData();
+			service.updatePerson(person);
+			model.updatePerson(person);
+			fireDrityChanged(isDirty());
+		}
+		
+	}
+
+	
 	@Override
 	public void persist() throws Exception {
 		service.persist();
@@ -207,5 +237,7 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		return service.isDirty();
 	}
 
+	
+	
 
 }

@@ -6,6 +6,8 @@ import tp.Tools.SwingTools;
 import tp.model.Person;
 
 import javax.swing.JTabbedPane;
+import javax.swing.InputVerifier;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
@@ -13,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.beans.PropertyChangeEvent;
+import java.awt.Dimension;
 
 public class ContactDetails extends JPanel {
 	private JTextField tfName;
@@ -29,12 +32,28 @@ public class ContactDetails extends JPanel {
 	 * Create the panel.
 	 */
 	public ContactDetails() {
+		setMinimumSize(new Dimension(400, 300));
 		initialize();
+		
+		tfTaxNr.setInputVerifier(new InputVerifier() {
+
+			@Override
+			public boolean verify(JComponent input) {
+				tfTaxNr.setToolTipText("dasdasdasdasdasdsad");
+				
+		
+				
+				return false;
+			}
+			
+		});
+		
+		
 
 	}
 
 	private void initialize() {
-		setLayout(new MigLayout("", "[grow,fill]", "[112.00,grow][grow]"));
+		setLayout(new MigLayout("", "[grow,fill]", "[112.00,grow,top][grow]"));
 
 		JPanel panel = new JPanel();
 		add(panel, "cell 0 0,grow");
@@ -106,7 +125,7 @@ public class ContactDetails extends JPanel {
 		});
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		add(tabbedPane, "cell 0 1,grow");
+		add(tabbedPane, "cell 0 1,growx,aligny top");
 		
 		AddressDetailsPanel panel_1 = new AddressDetailsPanel();
 		tabbedPane.addTab("Address 1", null, panel_1, null);
@@ -119,6 +138,7 @@ public class ContactDetails extends JPanel {
 	public void setData(Person person) {
 		this.person = person;
 		bind(person);
+	
 	}
 
 	public void bind(Person person) {
@@ -138,6 +158,7 @@ public class ContactDetails extends JPanel {
 		for (JTextField jTextField : textFields) {
 			jTextField.setEditable(!isReadOnly);
 		}
+		
 	}
 	
 

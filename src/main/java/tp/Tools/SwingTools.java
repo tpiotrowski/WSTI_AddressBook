@@ -51,5 +51,4 @@ public class SwingTools {
 	    if (d != null) d.addDocumentListener(dl);
 	}
 
-	
 }
