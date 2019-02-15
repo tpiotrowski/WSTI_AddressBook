@@ -22,6 +22,7 @@ import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.text.IconView;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.comparator.LastModifiedFileComparator;
 
 import com.google.gson.GsonBuilder;
 
@@ -167,6 +168,8 @@ public class MainFrm {
 		return file;
 	}
 
+	
+	Boolean lastIsDirtyBoolean = false;
 	private void addDbEditorTab(JTabbedPane tabbedPane, JFileChooser fileChooser) {
 		File selectedFile = fileChooser.getSelectedFile();
 
@@ -191,19 +194,24 @@ public class MainFrm {
 
 				var titleComponent = (TabPanelTitle) tabbedPane.getTabComponentAt(index);
 
-				if (isDirty) {
+				if (isDirty && isDirty != lastIsDirtyBoolean) 
+				{
 					var title = titleComponent.getTitle();
 
 					title = title + " *";
 
 					titleComponent.setTitleLabel(title);
-				} else {
+				}
+				
+				if(!isDirty && isDirty != lastIsDirtyBoolean){
 					var title = titleComponent.getTitle();
 
 					title = title.replace(" *", "");
 
 					titleComponent.setTitleLabel(title);
 				}
+				
+				lastIsDirtyBoolean = isDirty;
 
 			});
 

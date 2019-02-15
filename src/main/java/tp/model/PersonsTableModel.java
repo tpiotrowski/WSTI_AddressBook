@@ -106,8 +106,12 @@ public class PersonsTableModel extends AbstractTableModel {
 	}
 
 	public Person getRow(int index)
-	{
-		return persons.get(index);
+	{	if(index > -1)
+			return persons.get(index);
+		else {
+			return null;
+		}
+	
 	}
 	
 	@Override

@@ -16,9 +16,12 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.RowSorterEvent;
+import javax.swing.event.RowSorterListener;
 
 import net.miginfocom.swing.MigLayout;
 import tp.interfaces.IContactBookService;
@@ -68,9 +71,17 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 
 		table = new JTable();
 		table.setAutoCreateRowSorter(true);
-		table.setUpdateSelectionOnSort(true);
+		
+		table.setUpdateSelectionOnSort(false);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		var sorter = table.getRowSorter();
+		
+		sorter.addRowSorterListener(e -> {
+			bindPersonDetails();
+		});
+		
 		scrollPane.setViewportView(table);
+		
 
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(e -> newPersonButton(e));
@@ -174,10 +185,7 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 			
 			table.getSelectionModel().addListSelectionListener(e -> {
 				bindPersonDetails();
-				
-				
 			});
-			
 			
 			if(!list.isEmpty())
 			{
@@ -205,8 +213,8 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 
 	private Person getSelectedPerson() {
 		var selectedRowIndex = table.getSelectedRow();
-
-		var person = model.getRow(selectedRowIndex);
+		var index = table.convertRowIndexToModel(selectedRowIndex);
+		var person = model.getRow(index);
 		return person;
 	}
 
