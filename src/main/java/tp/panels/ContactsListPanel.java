@@ -45,6 +45,12 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 	 * Create the panel.
 	 */
 	public ContactsListPanel() {
+		initialize();
+		
+
+	}
+
+	private void initialize() {
 		setLayout(new GridLayout(1, 0, 0, 0));
 
 		splitPane = new JSplitPane();
@@ -126,8 +132,6 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		   splitPane.setOneTouchExpandable(true);
 	        splitPane.setContinuousLayout(true);
 		contactDetailsPanel.setLayout(new MigLayout("", "[grow]", "[grow]"));
-		
-
 	}
 
 	@Override
@@ -163,27 +167,40 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 			}
 
 			model = new PersonsTableModel(table, list);
+			
+			
+			
 			table.getRowSorter().toggleSortOrder(1);
+			
 			table.getSelectionModel().addListSelectionListener(e -> {
-				var person = getSelectedPerson();
-				
-				ContactDetails cDetails = new ContactDetails();
-				
-				cDetails.setReadOnly(true);
-				cDetails.setData(person);
-				contactDetailsPanel.removeAll();
-				contactDetailsPanel.add(cDetails,"cell 0 0,growx,aligny top");
-				contactDetailsPanel.setSize(cDetails.getMinimumSize());
-				validate();
+				bindPersonDetails();
 				
 				
 			});
 			
+			
+			if(!list.isEmpty())
+			{
+				table.changeSelection(0, 0, false, false);
+			}
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private void bindPersonDetails() {
+		var person = getSelectedPerson();
+		
+		ContactDetails cDetails = new ContactDetails();
+		
+		cDetails.setReadOnly(true);
+		cDetails.setData(person);
+		contactDetailsPanel.removeAll();
+		contactDetailsPanel.add(cDetails,"cell 0 0,growx,aligny top");
+		contactDetailsPanel.setSize(cDetails.getMinimumSize());
+		validate();
 	}
 
 	private Person getSelectedPerson() {
@@ -205,6 +222,7 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 			service.addPerson(person);
 			model.addPerson(person);
 			fireDrityChanged(isDirty());
+			bindPersonDetails();
 		}
 	}
 	
@@ -221,6 +239,7 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 			service.updatePerson(person);
 			model.updatePerson(person);
 			fireDrityChanged(isDirty());
+			bindPersonDetails();
 		}
 		
 	}

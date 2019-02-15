@@ -13,8 +13,17 @@ public class Address implements Serializable{
 	 String city;
 	 String country;
 	 String zip;
+	 String street;
 	
 	
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
 	public Address() {
 		super();
 	}
