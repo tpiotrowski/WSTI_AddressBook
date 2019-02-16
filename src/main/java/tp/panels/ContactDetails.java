@@ -10,13 +10,17 @@ import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.beans.PropertyChangeEvent;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+
 
 public class ContactDetails extends JPanel {
 	private JTextField tfName;
@@ -29,6 +33,8 @@ public class ContactDetails extends JPanel {
 	ArrayList<JTextField> textFields = new ArrayList<JTextField>();
 	private AddressDetailsPanel addressPanel2;
 	private AddressDetailsPanel addressPanel1;
+	private Color goodFieldColor = UIManager.getColor("TextField.background");
+
 	
 	
 	/**
@@ -37,29 +43,51 @@ public class ContactDetails extends JPanel {
 	public ContactDetails() {
 		setMinimumSize(new Dimension(400, 300));
 		initialize();
-		
-		
-		
-		
-		
-		
+
 		tfTaxNr.setInputVerifier(new InputVerifier() {
 
 			@Override
 			public boolean verify(JComponent input) {
-				tfTaxNr.setToolTipText("dasdasdasdasdasdsad");
 				
-		
+				var field = ((JTextField)input);
 				
-				return false;
+				field.setToolTipText("");
+				field.setBackground(goodFieldColor);
+				
+				var text = field.getText();
+				if(text.equals("")) {
+					return true;
+				}else {
+					
+					text = text.replaceAll("[^\\.0123456789]","");	
+					if(text.length() != 10 )
+					{
+						field.setToolTipText("Input is to chort tax. Minimum 10 digits");
+						field.setBackground(Color.RED);
+						return false;
+					}
+					var weights = new int[]{6,5,7,2,3,4,5,6,7};
+					
+				
+					var sum = 0;
+					for (int i = 0; i < 9; i++) {
+						var number = Character.getNumericValue(text.charAt(i));
+						sum += number * weights[i];
+					}
+					
+					var controlDigit = Character.getNumericValue(text.charAt(9));
+					
+					if(sum % 11 != controlDigit) {
+						field.setToolTipText("This is not valid Tax Id number");
+						field.setBackground(Color.RED);
+						return false;
+					}
+					
+					return true;
+				}
 			}
 			
 		});
-		
-
-		
-		
-
 	}
 
 	private void initialize() {
@@ -145,6 +173,11 @@ public class ContactDetails extends JPanel {
 		tabbedPane.addTab("Address 2", null, addressPanel2, null);
 	}
 
+	void enableCalculate()
+	{
+		
+	}
+	
 	public void setData(Person person) {
 		this.person = person;
 		bind(person);

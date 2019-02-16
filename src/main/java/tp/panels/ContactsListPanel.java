@@ -178,9 +178,7 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 			}
 
 			model = new PersonsTableModel(table, list);
-			
-			
-			
+
 			table.getRowSorter().toggleSortOrder(1);
 			
 			table.getSelectionModel().addListSelectionListener(e -> {

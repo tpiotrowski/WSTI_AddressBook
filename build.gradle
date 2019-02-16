@@ -39,6 +39,7 @@ dependencies {
     compile group: 'com.miglayout', name: 'miglayout-swing', version: '5.0'
     
     
+    
 }
 
 // In this section you declare where to find the dependencies of your project
