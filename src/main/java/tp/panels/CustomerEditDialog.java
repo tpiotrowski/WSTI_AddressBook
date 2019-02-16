@@ -67,12 +67,17 @@ public class CustomerEditDialog extends JDialog implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == okButton) {
-			returnValue = JOptionPane.OK_OPTION;
+			if(contactDetails.getIsDataValidBoolean()) {
+				
+				returnValue = JOptionPane.OK_OPTION;
+				dispose();
+			}
 		}
 		if(e.getSource() == cancelButton) {
 			returnValue = JOptionPane.CANCEL_OPTION;
+			dispose();
 		}
-		dispose();
+		
 	}
 
 	public int showDialog() {

@@ -35,8 +35,17 @@ public class ContactDetails extends JPanel {
 	private AddressDetailsPanel addressPanel1;
 	private Color goodFieldColor = UIManager.getColor("TextField.background");
 
+	Boolean isDataValidBoolean = false;
 	
 	
+	public Boolean getIsDataValidBoolean() {
+		return isDataValidBoolean;
+	}
+
+	public void setIsDataValidBoolean(Boolean isDataValidBoolean) {
+		this.isDataValidBoolean = isDataValidBoolean;
+	}
+
 	/**
 	 * Create the panel.
 	 */
@@ -64,6 +73,7 @@ public class ContactDetails extends JPanel {
 					{
 						field.setToolTipText("Input is to chort tax. Minimum 10 digits");
 						field.setBackground(Color.RED);
+						isDataValidBoolean = false;
 						return false;
 					}
 					var weights = new int[]{6,5,7,2,3,4,5,6,7};
@@ -80,9 +90,10 @@ public class ContactDetails extends JPanel {
 					if(sum % 11 != controlDigit) {
 						field.setToolTipText("This is not valid Tax Id number");
 						field.setBackground(Color.RED);
+						isDataValidBoolean = false;
 						return false;
 					}
-					
+					isDataValidBoolean = true;
 					return true;
 				}
 			}
@@ -173,11 +184,6 @@ public class ContactDetails extends JPanel {
 		tabbedPane.addTab("Address 2", null, addressPanel2, null);
 	}
 
-	void enableCalculate()
-	{
-		
-	}
-	
 	public void setData(Person person) {
 		this.person = person;
 		bind(person);
