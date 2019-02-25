@@ -92,6 +92,7 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		panel.add(btnEdit, "cell 0 0");
 
 		JButton btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(e -> deletePerson(e));
 		panel.add(btnDelete, "cell 0 0,alignx left,aligny top");
 
 		JLabel lblSearch = new JLabel("Search:");
@@ -216,6 +217,24 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		return person;
 	}
 
+	
+	void deletePerson(ActionEvent e) {
+		
+		var person = getSelectedPerson();
+		
+		if(person != null)
+		{
+			if (JOptionPane.showConfirmDialog(this,
+					"Are you shure?", "Delete person?",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+				service.deletePerson(person);
+				model.deletePerson(person);
+				fireDrityChanged(isDirty());
+			}
+		}
+		
+	}
+	
 	void newPersonButton(ActionEvent e) {
 		
 		CustomerEditDialog dialog = new CustomerEditDialog();
