@@ -23,10 +23,11 @@ public class TaxNumberInputVerifier extends InputVerifierExtened {
 		var field = ((JTextField) input);
 
 		field.setToolTipText("");
-		field.setBackground(goodFieldColor);
+		field.setBackground(goodFieldColor);	
 
 		var text = field.getText();
 		if (text.equals("")) {
+			FireOnVerifiy(input, true);
 			return true;
 		} else {
 

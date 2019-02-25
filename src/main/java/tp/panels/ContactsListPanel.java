@@ -262,6 +262,7 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 		return service.isDirty();
 	}
 
+
 	
 	
 

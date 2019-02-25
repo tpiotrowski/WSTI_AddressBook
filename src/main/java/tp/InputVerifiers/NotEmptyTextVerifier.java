@@ -24,9 +24,10 @@ public class NotEmptyTextVerifier extends InputVerifierExtened {
 		if (text.equals("")) {
 			input.setToolTipText("Field can't be empty.");
 			input.setBackground(Color.RED);
+			FireOnVerifiy(input, false);
 			return false;
 		}
-
+		FireOnVerifiy(input, true);
 		return true;
 	}
 

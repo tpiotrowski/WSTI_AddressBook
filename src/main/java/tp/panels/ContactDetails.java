@@ -2,6 +2,7 @@ package tp.panels;
 
 import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
+import tp.InputVerifiers.NotEmptyTextVerifier;
 import tp.InputVerifiers.TaxNumberInputVerifier;
 import tp.InputVerifiers.Common.InputVerifierListener;
 import tp.Tools.SwingTools;
@@ -14,10 +15,14 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 import java.beans.PropertyChangeEvent;
 import java.awt.Color;
 import java.awt.Component;
@@ -32,11 +37,23 @@ public class ContactDetails extends JPanel implements InputVerifierListener {
 	private JTextField tfTaxNr;
 	private Person person;
 
-	ArrayList<JTextField> textFields = new ArrayList<JTextField>();
+	Map<JTextField,Boolean> textFields = new HashMap<JTextField,Boolean>();
 	private AddressDetailsPanel addressPanel2;
 	private AddressDetailsPanel addressPanel1;
-	
+	protected ArrayList<IValidationOccureListener> validationOccureListeners = new ArrayList<IValidationOccureListener>();
 
+	public void removeValidationOccureListener(IValidationOccureListener listener) {
+		if(validationOccureListeners.contains(listener))
+			validationOccureListeners.remove(listener);
+	}
+	
+	public void addValidationOccureListener(IValidationOccureListener listener) {
+		if(validationOccureListeners.contains(listener))
+			return;
+		
+		validationOccureListeners.add(listener);
+	}
+	
 	Boolean isDataValidBoolean = false;
 	
 	
@@ -58,12 +75,41 @@ public class ContactDetails extends JPanel implements InputVerifierListener {
 		var taxNrVerifier = new TaxNumberInputVerifier();
 		taxNrVerifier.addInputVerifierListener(this);
 		
+		
 		tfTaxNr.setInputVerifier(taxNrVerifier);
+		
+		textFields.put(tfTaxNr, true);
+		
+		NotEmptyTextVerifier notEmptyTextInputVerifier = new NotEmptyTextVerifier();
+		notEmptyTextInputVerifier.addInputVerifierListener(this);
+		
+		tfName.setInputVerifier(notEmptyTextInputVerifier);
+		textFields.put(tfName, false);
+		
+		tfSurname.setInputVerifier(notEmptyTextInputVerifier);
+		textFields.put(tfSurname, false);
+		
+		
+		
 	}
 
+	
+	Boolean isFBooleanirstValidation = true;
 	@Override
 	public void onVerify(JComponent component, Boolean isValid) {
-		this.isDataValidBoolean = this.isDataValidBoolean && isValid;
+		this.isDataValidBoolean = true;
+		
+		textFields.put((JTextField) component,isValid);
+		
+		
+		
+		for (var value : textFields.values()) {
+			this.isDataValidBoolean = this.isDataValidBoolean && value; 
+		}
+		
+		for (var listener : validationOccureListeners) {
+			listener.onValidation(this.isDataValidBoolean);
+		}
 	}
 	
 	private void initialize() {
@@ -80,8 +126,7 @@ public class ContactDetails extends JPanel implements InputVerifierListener {
 		SwingTools.addChangeListener(tfName, e -> {
 			person.setName(tfName.getText());
 		});
-		
-		textFields.add(tfName);
+
 
 		panel.add(tfName, "flowx,cell 1 0,growx");
 		tfName.setColumns(10);
@@ -93,7 +138,7 @@ public class ContactDetails extends JPanel implements InputVerifierListener {
 		panel.add(tfSurname, "cell 1 1,growx");
 		tfSurname.setColumns(10);
 		
-		textFields.add(tfSurname);
+	
 		
 		SwingTools.addChangeListener(tfSurname, e -> {
 			person.setSurname(tfSurname.getText());
@@ -105,8 +150,9 @@ public class ContactDetails extends JPanel implements InputVerifierListener {
 		tfPhone = new JTextField();
 		panel.add(tfPhone, "cell 1 2,growx");
 		tfPhone.setColumns(10);
+		textFields.put(tfPhone, true);
 
-		textFields.add(tfPhone);
+	
 		
 		SwingTools.addChangeListener(tfPhone, e -> {
 			person.setPhone(tfPhone.getText());
@@ -118,8 +164,8 @@ public class ContactDetails extends JPanel implements InputVerifierListener {
 		tfIdDocument = new JTextField();
 		panel.add(tfIdDocument, "cell 1 3,growx,aligny top");
 		tfIdDocument.setColumns(10);
+		textFields.put(tfIdDocument, true);
 
-		textFields.add(tfIdDocument);
 		
 		SwingTools.addChangeListener(tfIdDocument, e -> {
 			person.setIdDocument(tfIdDocument.getText());
@@ -131,8 +177,6 @@ public class ContactDetails extends JPanel implements InputVerifierListener {
 		tfTaxNr = new JTextField();
 		panel.add(tfTaxNr, "cell 1 4,growx");
 		tfTaxNr.setColumns(10);
-
-		textFields.add(tfTaxNr);
 		
 		SwingTools.addChangeListener(tfTaxNr, e -> {
 			person.setTaxId(tfTaxNr.getText());
@@ -176,7 +220,7 @@ public class ContactDetails extends JPanel implements InputVerifierListener {
 	}
 
 	public void setReadOnly(Boolean isReadOnly) {
-		for (JTextField jTextField : textFields) {
+		for (JTextField jTextField : textFields.keySet()) {
 			jTextField.setEditable(!isReadOnly);
 		}
 		addressPanel1.setReadOnly(isReadOnly);

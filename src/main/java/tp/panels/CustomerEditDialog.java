@@ -16,7 +16,7 @@ import tp.model.Person;
 import java.awt.Dimension;
 import java.awt.Window.Type;
 
-public class CustomerEditDialog extends JDialog implements ActionListener{
+public class CustomerEditDialog extends JDialog implements ActionListener, IValidationOccureListener{
 	JButton okButton;
 	/**
 	 * Create the dialog.
@@ -26,6 +26,7 @@ public class CustomerEditDialog extends JDialog implements ActionListener{
 		setResizable(false);
 		setType(Type.POPUP);
 		initializeComponent();
+		okButton.setEnabled(false);
 	}
 
 	private void initializeComponent() {
@@ -55,6 +56,7 @@ public class CustomerEditDialog extends JDialog implements ActionListener{
 			panel.setLayout(new BorderLayout(0, 0));
 			{
 				contactDetails = new ContactDetails();
+				contactDetails.addValidationOccureListener(this);
 				panel.add(contactDetails, BorderLayout.CENTER);
 			}
 		}
@@ -81,7 +83,7 @@ public class CustomerEditDialog extends JDialog implements ActionListener{
 	}
 
 	public int showDialog() {
-		this.setTitle("Ala ma kota");
+		this.setTitle("");
 		this.setModalityType(ModalityType.APPLICATION_MODAL);
 		
 		this.setVisible(true);
@@ -98,6 +100,13 @@ public class CustomerEditDialog extends JDialog implements ActionListener{
 
 	public Person getData() {
 		return contactDetails.getData();
+	}
+
+	@Override
+	public void onValidation(Boolean isValid) {
+		// TODO Auto-generated method stub
+		okButton.setEnabled(isValid);
+		
 	}
 
 }
