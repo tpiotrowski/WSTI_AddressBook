@@ -199,7 +199,8 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 
 	private void bindPersonDetails() {
 		var person = getSelectedPerson();
-		
+		if(person == null)
+			return;
 		ContactDetails cDetails = new ContactDetails();
 		
 		cDetails.setReadOnly(true);
@@ -212,6 +213,8 @@ public class ContactsListPanel extends JPanel implements IContactListEditor {
 
 	private Person getSelectedPerson() {
 		var selectedRowIndex = table.getSelectedRow();
+		if(selectedRowIndex == -1)
+			return null;
 		var index = table.convertRowIndexToModel(selectedRowIndex);
 		var person = model.getRow(index);
 		return person;

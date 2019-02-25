@@ -33,7 +33,7 @@ public class TaxNumberInputVerifier extends InputVerifierExtened {
 
 			text = text.replaceAll("[^\\.0123456789]", "");
 			if (text.length() != 10) {
-				field.setToolTipText("Input is to chort tax. Minimum 10 digits");
+				field.setToolTipText("Input is to short tax. Minimum 10 digits");
 				field.setBackground(Color.RED);
 
 				FireOnVerifiy(input, false);
