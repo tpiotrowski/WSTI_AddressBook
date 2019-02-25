@@ -104,15 +104,9 @@ public class MainFrm {
 
 		mnFile.add(mntmOpen);
 
-		JMenuItem mntmSaveFile = new JMenuItem("Save current");
-		mnFile.add(mntmSaveFile);
-
 		JMenuItem mntmSaveFileAll = new JMenuItem("Save all");
 		mntmSaveFileAll.addActionListener(s -> persistAll());
 		mnFile.add(mntmSaveFileAll);
-
-		JMenu mnAbout = new JMenu("About");
-		menuBar.add(mnAbout);
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
